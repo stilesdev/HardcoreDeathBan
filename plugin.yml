@@ -1,0 +1,24 @@
+author: mstiles92
+description: Manages players after death.
+name: HardcoreDeathBan
+main: com.mstiles92.hardcoredeathban.HardcoreDeathBanPlugin
+version: '0.1'
+startup: postworld
+permissions:
+  deathban.*:
+    description: Allows full access to the plugin.
+    default: op
+    children:
+      deathban.ban: true
+      deathban.bypass: true
+  deathban.ban:
+    descripton: Player can ban any other player.
+    default: op
+  deathban.bypass:
+    description: Player will respawn like normal, bypassing the kick.
+    default: op
+commands:
+  deathban:
+    description: 
+    usage: /<command> [ban]
+    aliases: [db, hdb]
