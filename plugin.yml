@@ -6,19 +6,59 @@ version: '0.1'
 startup: postworld
 permissions:
   deathban.*:
-    description: Allows full access to the plugin.
-    default: op
+    description: Allows full access to all commands in the plugin.
+    default: false
     children:
+      deathban.display: true
+      deathban.enable: true
       deathban.ban: true
-      deathban.bypass: true
-  deathban.ban:
-    descripton: Player can ban any other player.
+      deathban.ban.exempt: true
+      deathban.unban: true
+      deathban.status: true
+      deathban.credits.check: true
+      deathban.credits.check.others: true
+      deathban.credits.send: true
+      deathban.credits.give: true
+      deathban.credits.take: true
+  deathban.display:
+    descripton: Allow access to /deathban to show all plugin commands.
     default: op
-  deathban.bypass:
-    description: Player will respawn like normal, bypassing the kick.
+  deathban.enable:
+    description: Allow access to the /deathban enable and /deathban disable commands.
+    default: op
+  deathban.ban:
+    description: Allow access to manually ban a player via the /deathban ban command.
+    default: op
+  deathban.ban.exempt:
+    description: Players with this permission can not be banned and will respawn as normal when killed.
+    default: false
+  deathban.unban:
+    description: Allow access to manually unban a player via the /deathban unban command.
+    default: op
+  deathban.status:
+    description: Allow access to check a player's ban status via the /deathban status command.
+    default: op
+  deathban.credits.check:
+    description: Allow access to check your own revival credits via the /credits command.
+    default: true
+  deathban.credits.check.others:
+    description: Allow access to check other players' revival credits via the /credits command.
+    default: op
+  deathban.credits.send:
+    description: Allow access to send revival credits to other players via the /credits send command.
+    default: true
+  deathban.credits.give:
+    description: Allow access to give revival credits to players via the /credits give command.
+    default: op
+  deathban.credits.take:
+    description: Allow access to take revival credits from players via the /credits take command.
     default: op
 commands:
   deathban:
     description: 
-    usage: /<command> [ban]
+    usage: /<command> [enable | disable | ban <player> [time] | unban <player> | status <player>]
     aliases: [db, hdb]
+  credits:
+    description:
+    usage: /<command> [player | send <player> <amount> | give <player> <amount> | take <player> <amount>]
+    aliases: [cr]
