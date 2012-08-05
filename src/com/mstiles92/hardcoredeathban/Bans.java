@@ -7,25 +7,26 @@ import java.io.IOException;
 import org.bukkit.configuration.InvalidConfigurationException;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-public class RevivalCredits {
+public class Bans {
 	
 	private final HardcoreDeathBanPlugin plugin;
-	private YamlConfiguration creditConfig;
+	private YamlConfiguration banConfig;
 	private File configFile;
-	private boolean loaded = false;
+	private boolean loaded;
 	
-	public RevivalCredits(HardcoreDeathBanPlugin plugin) {
+	public Bans(HardcoreDeathBanPlugin plugin) {
 		this.plugin = plugin;
+		loaded = false;
 	}
-	
+
 	public void load(String filename) {
-		
 		configFile = new File(plugin.getDataFolder(), filename);
 		
 		if (configFile.exists()) {
-			creditConfig = new YamlConfiguration();
+			banConfig = new YamlConfiguration();
+			
 			try {
-				creditConfig.load(configFile);
+				banConfig.load(configFile);
 			}
 			catch (FileNotFoundException e) {
 				// TODO Handle catching exception
@@ -40,8 +41,8 @@ public class RevivalCredits {
 		} else {
 			try {
 				configFile.createNewFile();
-				creditConfig = new YamlConfiguration();
-				creditConfig.load(configFile);
+				banConfig = new YamlConfiguration();
+				banConfig.load(configFile);
 			}
 			catch (IOException e) {
 				// TODO Handle catching exception
@@ -49,12 +50,12 @@ public class RevivalCredits {
 			catch (InvalidConfigurationException e) {
 				// TODO Handle catching exception
 			}
-		}	
+		}
 	}
 	
 	public void save() {
 		try {
-			creditConfig.save(configFile);
+			banConfig.save(configFile);
 		}
 		catch (IOException e) {
 			// TODO Handle catching exception
@@ -67,8 +68,8 @@ public class RevivalCredits {
 	
 	public YamlConfiguration getConfig() {
 		if (!loaded) {
-			load("credits.yml");
+			load("bans.yml");
 		}
-		return creditConfig;
+		return banConfig;
 	}
 }
