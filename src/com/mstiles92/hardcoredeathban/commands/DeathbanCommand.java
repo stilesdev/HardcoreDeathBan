@@ -25,13 +25,13 @@ public class DeathbanCommand implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("enable")) {
-			plugin.enabled = true;
+			plugin.config.set("Enabled", true);
 			cs.sendMessage(tag + "Enabled!");
 			return true;
 		}
 		
 		if (args[0].equalsIgnoreCase("disable")) {
-			plugin.enabled = false;
+			plugin.config.set("Enabled", false);
 			cs.sendMessage(tag + "Disabled!");
 			return true;
 		}
