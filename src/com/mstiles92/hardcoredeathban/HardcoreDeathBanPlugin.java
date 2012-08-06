@@ -24,7 +24,6 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 	private final RevivalCredits credits = new RevivalCredits(this);
 	private final Bans bans = new Bans(this);
 	public ArrayList<String> banList = new ArrayList<String>();
-	public boolean enabled =  true;
 	
 	public void onEnable() {
 		log = this.getLogger();
