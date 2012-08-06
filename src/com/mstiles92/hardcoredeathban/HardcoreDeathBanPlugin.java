@@ -24,6 +24,7 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 	private final RevivalCredits credits = new RevivalCredits(this);
 	private final Bans bans = new Bans(this);
 	public ArrayList<String> banList = new ArrayList<String>();
+	public boolean enabled =  true;
 	
 	public void onEnable() {
 		log = this.getLogger();
@@ -77,6 +78,10 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 		bans.getConfig().set(player.toLowerCase(), null);
 	}
 	
+	public void setBanned(String player) {
+		this.setBanned(player, config.getString("Ban-Time"));
+	}
+	
 	public void setBanned(String player, String time) {
 		Player p = this.getServer().getPlayerExact(player);
 		try {
@@ -91,7 +96,7 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 						bans.getConfig().set(player.toLowerCase(), unbanDate.getTimeInMillis());
 						bans.save();
 						banList.add(player);
-						this.getServer().getScheduler().scheduleSyncDelayedTask(this, new KickRunnable(this, player), this.getConfig().getLong("Tick-Delay"));
+						this.getServer().getScheduler().scheduleSyncDelayedTask(this, new KickRunnable(this, player), this.getConfig().getInt("Tick-Delay"));
 					}
 				}
 			} else {					// Player is offline
