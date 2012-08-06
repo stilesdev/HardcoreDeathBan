@@ -21,7 +21,7 @@ public class KickRunnable implements Runnable {
 			Player p = plugin.getServer().getPlayerExact(playerName);
 			if (p != null) {
 				String kickMessage = plugin.getConfig().getString("Death-Message");
-				p.kickPlayer(kickMessage);
+				p.kickPlayer(plugin.replaceVariables(kickMessage, p.getName()));
 				plugin.log.info("[KickRunnable] Player " + playerName + " kicked.");
 			} else {
 				plugin.log.info("[KickRunnable] Player " + playerName + " is offline.");

@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 import com.mstiles92.hardcoredeathban.HardcoreDeathBanPlugin;
 
@@ -27,6 +28,14 @@ public class DeathbanCommand implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("enable")) {
 			plugin.config.set("Enabled", true);
 			cs.sendMessage(tag + "Enabled!");
+			
+			Player[] plist = plugin.getServer().getOnlinePlayers();
+			for (Player p : plist) {
+				if (plugin.isBanned(p.getName())) {
+					p.kickPlayer(plugin.replaceVariables(plugin.config.getString("Banned-Message"), p.getName()));
+				}
+			}
+			
 			return true;
 		}
 		

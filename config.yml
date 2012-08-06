@@ -1,5 +1,5 @@
 Enabled: true
 Ban-Time: 1d2h34m
-Death-Message: Sorry, you have died and are now banned temporarily.
-Banned-Message: Sorry, your ban time is not up yet.
+Death-Message: Sorry, you have died and are now banned until %unbantime% on %unbandate%.
+Banned-Message: Sorry, your ban is not up until %unbantime% on %unbandate%.
 Tick-Delay: 15
