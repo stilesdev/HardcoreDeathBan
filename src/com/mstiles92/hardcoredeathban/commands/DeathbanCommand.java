@@ -50,7 +50,7 @@ public class DeathbanCommand implements CommandExecutor {
 				cs.sendMessage(tag + ChatColor.DARK_RED + "You must specify a player.");
 				return true;
 			}
-			
+			plugin.giveCredits(args[1], plugin.getCredits(args[1]) * -1);
 			if (args.length == 3) {
 				plugin.setBanned(args[1], args[2]);
 			} else {

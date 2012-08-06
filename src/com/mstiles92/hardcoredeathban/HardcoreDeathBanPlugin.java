@@ -116,7 +116,7 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 		int hourIndex = banTime.indexOf("h");
 		int minIndex = banTime.indexOf("m");
 		int days = 0, hours = 0, minutes = 0;
-		
+		// TODO Find more efficient way of parsing time
 		if (dayIndex != -1 && hourIndex != -1 && minIndex != -1) {                  // dhm
 			days = Integer.parseInt(banTime.substring(0, dayIndex));
 			hours = Integer.parseInt(banTime.substring(dayIndex + 1, hourIndex));
