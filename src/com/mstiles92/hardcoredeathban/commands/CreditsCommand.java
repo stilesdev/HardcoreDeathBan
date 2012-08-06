@@ -89,6 +89,11 @@ public class CreditsCommand implements CommandExecutor {
 			}
 		}
 		
+		if (args.length == 1) {
+			cs.sendMessage(tag + args[0] + "'s revival credits: " + plugin.getCredits(args[0]));
+			return true;
+		}
+		
 		return true;
 	}
 

@@ -58,10 +58,9 @@ public class DeathbanCommand implements CommandExecutor {
 				return true;
 			}
 			
-			if (plugin.config.contains(args[1])) {
-				plugin.config.set(args[1], null);
+			if (plugin.isBanned(args[1])) {
+				plugin.removeFromBan(args[1]);
 				cs.sendMessage(tag + args[1] + " has been unbanned.");
-				plugin.saveConfig();
 			} else {
 				cs.sendMessage(tag + args[1] + " is not currently banned.");
 			}
