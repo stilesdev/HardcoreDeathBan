@@ -17,7 +17,10 @@ public class DeathEvent implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerDeath(PlayerDeathEvent e) {
-		
+		if (plugin.config.getBoolean("Enabled")) {
+			plugin.log.info("Player death: " + e.getEntity().getName());
+			plugin.setBanned(e.getEntity().getName());
+		}
 	}
 	
 }
