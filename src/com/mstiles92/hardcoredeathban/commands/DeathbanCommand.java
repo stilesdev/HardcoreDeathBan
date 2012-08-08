@@ -41,6 +41,8 @@ public class DeathbanCommand implements CommandExecutor {
 						p.kickPlayer(plugin.replaceVariables(plugin.config.getString("Banned-Message"), p.getName()));
 					}
 				}
+			} else {
+				cs.sendMessage(perm);
 			}
 			return true;
 		}
@@ -50,6 +52,8 @@ public class DeathbanCommand implements CommandExecutor {
 				plugin.config.set("Enabled", false);
 				cs.sendMessage(tag + "Disabled!");
 				return true;
+			} else {
+				cs.sendMessage(perm);
 			}
 		}
 		
