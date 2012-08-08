@@ -12,6 +12,7 @@ public class DeathbanCommand implements CommandExecutor {
 	
 	private final HardcoreDeathBanPlugin plugin;
 	private final String tag = ChatColor.GREEN + "[HardcoreDeathBan] ";
+	private final String perm = ChatColor.DARK_RED + "You do not have permission to perform this command.";
 	
 	public DeathbanCommand(HardcoreDeathBanPlugin plugin) {
 		this.plugin = plugin;
@@ -22,6 +23,8 @@ public class DeathbanCommand implements CommandExecutor {
 		if (args.length < 1) {
 			if (cs.hasPermission("deathban.display")) {
 				// TODO List all commands to player
+			} else {
+				cs.sendMessage(perm);
 			}
 			
 			return true;
