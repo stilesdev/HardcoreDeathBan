@@ -51,10 +51,10 @@ public class DeathbanCommand implements CommandExecutor {
 			if (cs.hasPermission("deathban.enable")) {
 				plugin.config.set("Enabled", false);
 				cs.sendMessage(tag + "Disabled!");
-				return true;
 			} else {
 				cs.sendMessage(perm);
 			}
+			return true;
 		}
 		
 		if (args[0].equalsIgnoreCase("ban")) {
@@ -63,18 +63,22 @@ public class DeathbanCommand implements CommandExecutor {
 					cs.sendMessage(tag + ChatColor.RED + "You must specify a player.");
 					return true;
 				}
-				plugin.giveCredits(args[1], plugin.getCredits(args[1]) * -1);
-				if (args.length == 3) {
-					plugin.setBanned(args[1], args[2]);
+				if (plugin.getServer().getPlayerExact(args[1]).hasPermission("deathban.ban.exempt")) {
+					cs.sendMessage(tag + ChatColor.RED + "This player can not be banned!");
 				} else {
-					plugin.setBanned(args[1]);
+					plugin.giveCredits(args[1], plugin.getCredits(args[1]) * -1);
+					if (args.length == 3) {
+						plugin.setBanned(args[1], args[2]);
+					} else {
+						plugin.setBanned(args[1]);
+					}
+					String s = "%player% is now banned until %unbantime% %unbandate%";
+					cs.sendMessage(tag + plugin.replaceVariables(s, args[1]));
 				}
-				String s = "%player% is now banned until %unbantime% %unbandate%";
-				cs.sendMessage(tag + plugin.replaceVariables(s, args[1]));
-				return true;
 			} else {
 				cs.sendMessage(perm);
 			}
+			return true;
 		}
 		
 		if (args[0].equalsIgnoreCase("unban")) {

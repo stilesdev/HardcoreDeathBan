@@ -17,7 +17,7 @@ public class DeathEvent implements Listener {
 
 	@EventHandler(priority = EventPriority.NORMAL)
 	public void onPlayerDeath(PlayerDeathEvent e) {
-		if (plugin.config.getBoolean("Enabled")) {
+		if (plugin.config.getBoolean("Enabled") && !(e.getEntity().hasPermission("deathban.ban.exempt"))) {
 			plugin.log.info("Player death: " + e.getEntity().getName());
 			plugin.setBanned(e.getEntity().getName());
 		}
