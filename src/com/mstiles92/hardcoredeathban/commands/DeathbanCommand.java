@@ -101,16 +101,20 @@ public class DeathbanCommand implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("status")) {
-			if (args.length < 2) {
-				cs.sendMessage(tag + ChatColor.RED + "You must specify a player.");
-				return true;
-			}
-			
-			if (plugin.isBanned(args[1])) {
-				String s = "%player% is banned until %unbantime% %unbandate%";
-				cs.sendMessage(tag + plugin.replaceVariables(s, args[1]));
+			if (cs.hasPermission("deathban.status")) {
+				if (args.length < 2) {
+					cs.sendMessage(tag + ChatColor.RED + "You must specify a player.");
+					return true;
+				}
+				
+				if (plugin.isBanned(args[1])) {
+					String s = "%player% is banned until %unbantime% %unbandate%";
+					cs.sendMessage(tag + plugin.replaceVariables(s, args[1]));
+				} else {
+					cs.sendMessage(tag + args[1] + " is not currently banned.");
+				}
 			} else {
-				cs.sendMessage(tag + args[1] + " is not currently banned.");
+				cs.sendMessage(perm);
 			}
 			return true;
 		}
