@@ -86,21 +86,24 @@ public class CreditsCommand implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("take")) {
-			if (args.length < 3) {
-				cs.sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to give that player.");
-				return true;
+			if (cs.hasPermission("deathban.credits.take")) {
+				if (args.length < 3) {
+					cs.sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to give that player.");
+					return true;
+				}
+				
+				try {
+					if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
+					plugin.giveCredits(args[1], Integer.parseInt(args[2]) * -1);
+					cs.sendMessage(tag + "You have successfully taken " + args[2] + " revival credits from " + args[1] + ".");
+				}
+				catch (NumberFormatException e) {
+					cs.sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
+				}
+			} else {
+				cs.sendMessage(perm);
 			}
-			
-			try {
-				if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
-				plugin.giveCredits(args[1], Integer.parseInt(args[2]) * -1);
-				cs.sendMessage(tag + "You have successfully taken " + args[2] + " revival credits from " + args[1] + ".");
-				return true;
-			}
-			catch (NumberFormatException e) {
-				cs.sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
-				return true;
-			}
+			return true;
 		}
 		
 		if (args.length == 1) {
