@@ -20,7 +20,9 @@ public class DeathbanCommand implements CommandExecutor {
 	@Override
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
 		if (args.length < 1) {
-			// TODO List all commands to player
+			if (cs.hasPermission("deathban.display")) {
+				// TODO List all commands to player
+			}
 			
 			return true;
 		}
