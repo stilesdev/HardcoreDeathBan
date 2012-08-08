@@ -40,6 +40,7 @@ public class CreditsCommand implements CommandExecutor {
 			}
 			
 			try {
+				if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
 				if (plugin.getCredits(args[1]) >= Integer.parseInt(args[2])) {
 					plugin.giveCredits(cs.getName(), Integer.parseInt(args[2]) * -1);
 					plugin.giveCredits(args[1], Integer.parseInt(args[2]));
@@ -50,7 +51,7 @@ public class CreditsCommand implements CommandExecutor {
 				return true;
 			}
 			catch (NumberFormatException e) {
-				cs.sendMessage(tag + ChatColor.RED + "The amount must be specified as a whole integer value.");
+				cs.sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
 				return true;
 			}
 		}
@@ -62,12 +63,13 @@ public class CreditsCommand implements CommandExecutor {
 			}
 			
 			try {
+				if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
 				plugin.giveCredits(args[1], Integer.parseInt(args[2]));
 				cs.sendMessage(tag + "You have successfully given " + args[1] + " " + args[2] + " revival credits.");
 				return true;
 			}
 			catch (NumberFormatException e) {
-				cs.sendMessage(tag + ChatColor.RED + "The amount must be specified as a whole integer value.");
+				cs.sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
 				return true;
 			}
 		}
@@ -79,12 +81,13 @@ public class CreditsCommand implements CommandExecutor {
 			}
 			
 			try {
+				if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
 				plugin.giveCredits(args[1], Integer.parseInt(args[2]) * -1);
 				cs.sendMessage(tag + "You have successfully taken " + args[2] + " revival credits from " + args[1] + ".");
 				return true;
 			}
 			catch (NumberFormatException e) {
-				cs.sendMessage(tag + ChatColor.RED + "The amount must be specified as a whole integer value.");
+				cs.sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
 				return true;
 			}
 		}

@@ -47,7 +47,7 @@ public class DeathbanCommand implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("ban")) {
 			if (args.length < 2) {
-				cs.sendMessage(tag + ChatColor.DARK_RED + "You must specify a player.");
+				cs.sendMessage(tag + ChatColor.RED + "You must specify a player.");
 				return true;
 			}
 			plugin.giveCredits(args[1], plugin.getCredits(args[1]) * -1);
@@ -63,7 +63,7 @@ public class DeathbanCommand implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("unban")) {
 			if (args.length < 2) {
-				cs.sendMessage(tag + ChatColor.DARK_RED + "You must specify a player.");
+				cs.sendMessage(tag + ChatColor.RED + "You must specify a player.");
 				return true;
 			}
 			
@@ -78,7 +78,7 @@ public class DeathbanCommand implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("status")) {
 			if (args.length < 2) {
-				cs.sendMessage(tag + ChatColor.DARK_RED + "You must specify a player.");
+				cs.sendMessage(tag + ChatColor.RED + "You must specify a player.");
 				return true;
 			}
 			
