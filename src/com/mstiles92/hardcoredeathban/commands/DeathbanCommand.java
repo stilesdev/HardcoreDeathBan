@@ -118,10 +118,6 @@ public class DeathbanCommand implements CommandExecutor {
 			}
 			return true;
 		}
-		
 		return false;
 	}
-	
-	
-
 }

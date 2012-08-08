@@ -12,6 +12,7 @@ public class CreditsCommand implements CommandExecutor {
 	
 	private final HardcoreDeathBanPlugin plugin;
 	private final String tag = ChatColor.GREEN + "[HardcoreDeathBan] ";
+	private final String perm = ChatColor.DARK_RED + "You do not have permission to perform this command.";
 	
 	public CreditsCommand(HardcoreDeathBanPlugin plugin) {
 		this.plugin = plugin;
@@ -21,7 +22,11 @@ public class CreditsCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
 		if (args.length < 1) {
 			if (cs instanceof Player) {
-				cs.sendMessage(tag + "Revival credits: " + plugin.getCredits(cs.getName()));
+				if (cs.hasPermission("deathban.credits.check")) {
+					cs.sendMessage(tag + "Revival credits: " + plugin.getCredits(cs.getName()));
+				} else {
+					cs.sendMessage(perm);
+				}
 			} else {
 				cs.sendMessage(tag + ChatColor.RED + "This command can not be run from the console unless a player is specified.");
 			}
