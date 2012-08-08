@@ -31,23 +31,26 @@ public class DeathbanCommand implements CommandExecutor {
 		}
 		
 		if (args[0].equalsIgnoreCase("enable")) {
-			plugin.config.set("Enabled", true);
-			cs.sendMessage(tag + "Enabled!");
-			
-			Player[] plist = plugin.getServer().getOnlinePlayers();
-			for (Player p : plist) {
-				if (plugin.isBanned(p.getName())) {
-					p.kickPlayer(plugin.replaceVariables(plugin.config.getString("Banned-Message"), p.getName()));
+			if (cs.hasPermission("deathban.enable")) {
+				plugin.config.set("Enabled", true);
+				cs.sendMessage(tag + "Enabled!");
+				
+				Player[] plist = plugin.getServer().getOnlinePlayers();
+				for (Player p : plist) {
+					if (plugin.isBanned(p.getName())) {
+						p.kickPlayer(plugin.replaceVariables(plugin.config.getString("Banned-Message"), p.getName()));
+					}
 				}
 			}
-			
 			return true;
 		}
 		
 		if (args[0].equalsIgnoreCase("disable")) {
-			plugin.config.set("Enabled", false);
-			cs.sendMessage(tag + "Disabled!");
-			return true;
+			if (cs.hasPermission("deathban.enable")) {
+				plugin.config.set("Enabled", false);
+				cs.sendMessage(tag + "Disabled!");
+				return true;
+			}
 		}
 		
 		if (args[0].equalsIgnoreCase("ban")) {
