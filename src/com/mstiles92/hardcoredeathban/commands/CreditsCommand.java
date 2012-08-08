@@ -98,7 +98,11 @@ public class CreditsCommand implements CommandExecutor {
 		}
 		
 		if (args.length == 1) {
-			cs.sendMessage(tag + args[0] + "'s revival credits: " + plugin.getCredits(args[0]));
+			if (cs.hasPermission("deathban.credits.check.others")) {
+				cs.sendMessage(tag + args[0] + "'s revival credits: " + plugin.getCredits(args[0]));
+			} else {
+				cs.sendMessage(perm);
+			}
 			return true;
 		}
 		
