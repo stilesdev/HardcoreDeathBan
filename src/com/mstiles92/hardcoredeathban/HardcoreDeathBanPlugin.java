@@ -1,13 +1,11 @@
 package com.mstiles92.hardcoredeathban;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.logging.Logger;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mstiles92.hardcoredeathban.commands.*;
@@ -16,18 +14,15 @@ import com.mstiles92.hardcoredeathban.events.*;
 public class HardcoreDeathBanPlugin extends JavaPlugin {
 
 	public Logger log;
-	public PluginDescriptionFile pdf;
 	public FileConfiguration config;
 	
 	private final SimpleDateFormat TimeFormat = new SimpleDateFormat("hh:mm a z");
 	private final SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	private final RevivalCredits credits = new RevivalCredits(this);
 	private final Bans bans = new Bans(this);
-	public ArrayList<String> banList = new ArrayList<String>();
 	
 	public void onEnable() {
 		log = this.getLogger();
-		pdf = this.getDescription();
 		config = this.getConfig();
 		config.options().copyDefaults(true);
 		this.saveConfig();
@@ -94,7 +89,6 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 					} else {
 						bans.getConfig().set(player.toLowerCase(), unbanDate.getTimeInMillis());
 						bans.save();
-						banList.add(player);
 						this.getServer().getScheduler().scheduleSyncDelayedTask(this, new KickRunnable(this, player), this.getConfig().getInt("Tick-Delay"));
 					}
 				}

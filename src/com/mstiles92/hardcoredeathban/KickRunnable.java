@@ -29,7 +29,6 @@ public class KickRunnable implements Runnable {
 		} else {
 			plugin.log.info("[KickRunnable] Failed to store ban for " + playerName);
 		}
-		plugin.banList.clear();
 	}
 
 }
