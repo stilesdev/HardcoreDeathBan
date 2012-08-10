@@ -207,12 +207,12 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 				Calendar.HOUR_OF_DAY,
 				Calendar.MINUTE,
 				Calendar.SECOND };
-		String[] names = new String[] { "years", "months", "days", "hours", "minutes", "seconds" };
+		String[] names = new String[] { "year", "years", "month", "months", "day", "days", "hour", "hours", "minute", "minutes", "second", "seconds" };
 		
 		for (int i = 0; i < calendarTypes.length; i++) {
 			int difference = getTypeDifference(calendarTypes[i], first, second);
 			if (difference > 0) {
-				s.append(" ").append(difference).append(" ").append(names[i]);
+				s.append(" ").append(difference).append(" ").append(names[i * 2 + (difference > 1 ? 1 : 0)]);
 			}
 		}
 		
