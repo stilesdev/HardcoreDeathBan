@@ -244,6 +244,7 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 		if (unbanTime != null) {
 			msg = msg.replaceAll("%unbantime%", TimeFormat.format(unbanTime.getTime()));
 			msg = msg.replaceAll("%unbandate%", DateFormat.format(unbanTime.getTime()));
+			msg = msg.replaceAll("%bantimeleft%", buildTimeDifference(now, unbanTime));
 		}
 		
 		return msg;
