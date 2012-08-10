@@ -22,7 +22,7 @@ public class LoginEvent implements Listener {
 			if (plugin.isBanned(e.getName())) {
 				if (plugin.getCredits(e.getName()) < 1) {
 					plugin.log("Banned player denied login: " + e.getName());
-					String s = plugin.config.getString("Banned-Message");
+					String s = plugin.config.getString("Early-Message");
 					e.disallow(Result.KICK_BANNED, plugin.replaceVariables(s, e.getName()));
 				} else {
 					plugin.log("Banned player redeemed 1 revival credit upon login: " + e.getName());
