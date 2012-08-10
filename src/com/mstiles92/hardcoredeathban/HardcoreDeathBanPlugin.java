@@ -2,7 +2,11 @@ package com.mstiles92.hardcoredeathban;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
@@ -106,67 +110,134 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 				this.log("Offline player added to ban list: " + player);
 			}
 		}
-		catch (NumberFormatException e) {
+		catch (Exception e) {
 			// TODO Handle exception
 		}
 	}
 	
-	public Calendar parseBanTime(String banTime) throws NumberFormatException {
-		
-		Calendar c = Calendar.getInstance();
-		
-		int dayIndex = banTime.indexOf("d");
-		int hourIndex = banTime.indexOf("h");
-		int minIndex = banTime.indexOf("m");
-		int days = 0, hours = 0, minutes = 0;
-		// TODO Find more efficient way of parsing time
-		if (dayIndex != -1 && hourIndex != -1 && minIndex != -1) {                  // dhm
-			days = Integer.parseInt(banTime.substring(0, dayIndex));
-			hours = Integer.parseInt(banTime.substring(dayIndex + 1, hourIndex));
-			minutes = Integer.parseInt(banTime.substring(hourIndex + 1, minIndex));
-		} else if (dayIndex == -1) {
-			if (hourIndex != -1 && minIndex != -1) {								// hm
-				days = 0;
-				hours = Integer.parseInt(banTime.substring(0, hourIndex));
-				minutes = Integer.parseInt(banTime.substring(hourIndex + 1, minIndex));
-			} else if (hourIndex == -1 && minIndex != -1) {							// m
-				days = 0;
-				hours = 0;
-				minutes = Integer.parseInt(banTime.substring(0, minIndex));
-			} else if (hourIndex != -1 && minIndex == -1) {							// h
-				days = 0;
-				hours = Integer.parseInt(banTime.substring(0, hourIndex));
-				minutes = 0;
+	public static long parseBanTimeMS(String banTime) throws Exception {
+		return parseBanTime(banTime).getTimeInMillis();
+	}
+	
+	public static Calendar parseBanTime(String banTime) throws Exception {
+		Pattern p = Pattern.compile(
+				"(?:([0-9]+)\\s*y[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*mo[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*w[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*d[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*h[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*m[a-z]*[,\\s]*)?"
+				+ "(?:([0-9]+)\\s*(?:s[a-z]*)?)?", Pattern.CASE_INSENSITIVE);
+		int years = 0, months = 0, weeks = 0, days = 0, hours = 0, minutes = 0, seconds = 0;
+		boolean match = false;
+		Matcher m = p.matcher(banTime);
+		while (m.find()) {
+			if (m.group() == null || m.group().isEmpty()) continue;
+			for (int i = 0; i < m.groupCount(); i++) {
+				if (m.group(i) != null && !m.group(i).isEmpty()) {
+					match = true;
+					break;
+				}
 			}
-		} else if (hourIndex == -1)  {
-			if (dayIndex != -1 && minIndex != -1) {									// dm
-				days = Integer.parseInt(banTime.substring(0, dayIndex));
-				hours = 0;
-				minutes = Integer.parseInt(banTime.substring(dayIndex + 1, minIndex));
-			} else if (dayIndex != -1 && minIndex == -1) {							// d
-				days = Integer.parseInt(banTime.substring(0, dayIndex));
-				hours = 0;
-				minutes = 0;
+			
+			if (match)
+			{
+				if (m.group(1) != null && !m.group(1).isEmpty())
+				{
+					years = Integer.parseInt(m.group(1));
+				}
+				if (m.group(2) != null && !m.group(2).isEmpty())
+				{
+					months = Integer.parseInt(m.group(2));
+				}
+				if (m.group(3) != null && !m.group(3).isEmpty())
+				{
+					weeks = Integer.parseInt(m.group(3));
+				}
+				if (m.group(4) != null && !m.group(4).isEmpty())
+				{
+					days = Integer.parseInt(m.group(4));
+				}
+				if (m.group(5) != null && !m.group(5).isEmpty())
+				{
+					hours = Integer.parseInt(m.group(5));
+				}
+				if (m.group(6) != null && !m.group(6).isEmpty())
+				{
+					minutes = Integer.parseInt(m.group(6));
+				}
+				if (m.group(7) != null && !m.group(7).isEmpty())
+				{
+					seconds = Integer.parseInt(m.group(7));
+				}
+				break;
 			}
-		} else if (minIndex == -1) {
-			if (dayIndex != -1 && hourIndex != -1) {								// dh
-				days = Integer.parseInt(banTime.substring(0, dayIndex));
-				hours = Integer.parseInt(banTime.substring(dayIndex + 1, hourIndex));
-				minutes = 0;
+		}
+		if (!match) {
+			throw new Exception("Unable to parse time string.");
+		}
+		
+		Calendar c = new GregorianCalendar();
+		
+		if (years > 0) c.add(Calendar.YEAR, years);
+		if (months > 0) c.add(Calendar.MONTH, months);
+		if (weeks > 0) c.add(Calendar.WEEK_OF_YEAR, weeks);
+		if (days > 0) c.add(Calendar.DAY_OF_YEAR, days);
+		if (hours > 0) c.add(Calendar.HOUR_OF_DAY, hours);
+		if (minutes > 0) c.add(Calendar.MINUTE, minutes);
+		if (seconds > 0) c.add(Calendar.SECOND, seconds);
+		
+		return c;
+	}
+	
+	public static String buildTimeDifference(long ms) {
+		Calendar now = new GregorianCalendar();
+		Calendar then = new GregorianCalendar();
+		then.setTimeInMillis(ms);
+		return buildTimeDifference(now, then);
+	}
+	
+	public static String buildTimeDifference(Calendar first, Calendar second) {
+		if (first.equals(second)) return "now";
+		StringBuilder s = new StringBuilder();
+		int[] calendarTypes = new int[] {
+				Calendar.YEAR,
+				Calendar.MONTH,
+				Calendar.DAY_OF_MONTH,
+				Calendar.HOUR_OF_DAY,
+				Calendar.MINUTE,
+				Calendar.SECOND };
+		String[] names = new String[] { "years", "months", "days", "hours", "minutes", "seconds" };
+		
+		for (int i = 0; i < calendarTypes.length; i++) {
+			int difference = getTypeDifference(calendarTypes[i], first, second);
+			if (difference > 0) {
+				s.append(" ").append(difference).append(" ").append(names[i]);
 			}
 		}
 		
-		c.add(Calendar.DATE, days);
-		c.add(Calendar.HOUR, hours);
-		c.add(Calendar.MINUTE, minutes);
+		if (s.length() == 0) return "now";
 		
-		return c;
+		return s.toString();
+	}
+	
+	private static int getTypeDifference(int type, Calendar first, Calendar second) {
+		int difference = 0;
+		long save = first.getTimeInMillis();
+		while (!first.after(second)) {
+			save = first.getTimeInMillis();
+			first.add(type, 1);
+			difference++;
+		}
+		difference--;
+		first.setTimeInMillis(save);
+		return difference;
 	}
 	
 	public String replaceVariables(String msg, String name) {
 		msg = msg.replaceAll("%server%", this.getServer().getServerName());
 		if (name != null) msg = msg.replaceAll("%player%", name);
-		Calendar now = Calendar.getInstance();
+		Calendar now = new GregorianCalendar();
 		msg = msg.replaceAll("%currenttime%", TimeFormat.format(now.getTime()));
 		msg = msg.replaceAll("%currentdate%", DateFormat.format(now.getTime()));
 		Calendar unbanTime = getUnbanDate(name);

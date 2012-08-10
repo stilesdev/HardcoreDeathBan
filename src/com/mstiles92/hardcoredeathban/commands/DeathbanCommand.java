@@ -70,18 +70,21 @@ public class DeathbanCommand implements CommandExecutor {
 					return true;
 				}
 				plugin.log("[" + cs.getName() + "] Player command: /deathban ban " + args[1]);
-				if (plugin.getServer().getPlayerExact(args[1]).hasPermission("deathban.ban.exempt")) {
-					cs.sendMessage(tag + ChatColor.RED + "This player can not be banned!");
-				} else {
-					plugin.giveCredits(args[1], plugin.getCredits(args[1]) * -1);
-					if (args.length == 3) {
-						plugin.setBanned(args[1], args[2]);
-					} else {
-						plugin.setBanned(args[1]);
+				Player p = plugin.getServer().getPlayerExact(args[1]);
+				if (p != null) {
+					if (p.hasPermission("deathban.ban.exempt")) {
+						cs.sendMessage(tag + ChatColor.RED + "This player can not be banned!");
+						return true;
 					}
-					String s = "%player% is now banned until %unbantime% %unbandate%";
-					cs.sendMessage(tag + plugin.replaceVariables(s, args[1]));
+				} 
+				plugin.giveCredits(args[1], plugin.getCredits(args[1]) * -1);
+				if (args.length == 3) {
+					plugin.setBanned(args[1], args[2]);
+				} else {
+					plugin.setBanned(args[1]);
 				}
+				String s = "%player% is now banned until %unbantime% %unbandate%";
+				cs.sendMessage(tag + plugin.replaceVariables(s, args[1]));
 			} else {
 				cs.sendMessage(perm);
 				plugin.log("Player " + cs.getName() + " denied access to command: /deathban ban " + args[1]);
