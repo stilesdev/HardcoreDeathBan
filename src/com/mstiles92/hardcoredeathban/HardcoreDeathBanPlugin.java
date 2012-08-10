@@ -7,7 +7,6 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,7 +48,7 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 	
 	public void log(String message) {
 		if (this.getConfig().getBoolean("Verbose")) {
-			this.getLogger().info(ChatColor.GREEN + "[HardcoreDeathBan] " + message);
+			this.getLogger().info(message);
 		}
 	}
 	
