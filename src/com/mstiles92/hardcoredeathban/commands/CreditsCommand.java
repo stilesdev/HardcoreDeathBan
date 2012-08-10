@@ -23,9 +23,11 @@ public class CreditsCommand implements CommandExecutor {
 		if (args.length < 1) {
 			if (cs instanceof Player) {
 				if (cs.hasPermission("deathban.credits.check")) {
+					plugin.log("[" + cs.getName() + "] Player command: /credits");
 					cs.sendMessage(tag + "Revival credits: " + plugin.getCredits(cs.getName()));
 				} else {
 					cs.sendMessage(perm);
+					plugin.log("Player " + cs.getName() + " denied access to command: /credits");
 				}
 			} else {
 				cs.sendMessage(tag + ChatColor.RED + "This command can not be run from the console unless a player is specified.");
@@ -44,7 +46,7 @@ public class CreditsCommand implements CommandExecutor {
 					cs.sendMessage(tag + ChatColor.RED + "This command can only be run as a player.");
 					return true;
 				}
-				
+				plugin.log("[" + cs.getName() + "] Player command: /credits send " + args[1] + args[2]);
 				try {
 					if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
 					if (plugin.getCredits(args[1]) >= Integer.parseInt(args[2])) {
@@ -60,6 +62,7 @@ public class CreditsCommand implements CommandExecutor {
 				}
 			} else {
 				cs.sendMessage(perm);
+				plugin.log("Player " + cs.getName() + " denied access to command: /credits send " + args[1] + " " + args[2]);
 			}
 			return true;
 		}
@@ -70,7 +73,7 @@ public class CreditsCommand implements CommandExecutor {
 					cs.sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to give that player.");
 					return true;
 				}
-				
+				plugin.log("[" + cs.getName() + "] Player command: /credits give " + args[1] + args[2]);
 				try {
 					if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
 					plugin.giveCredits(args[1], Integer.parseInt(args[2]));
@@ -91,7 +94,7 @@ public class CreditsCommand implements CommandExecutor {
 					cs.sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to give that player.");
 					return true;
 				}
-				
+				plugin.log("[" + cs.getName() + "] Player command: /credits take " + args[1] + args[2]);
 				try {
 					if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
 					plugin.giveCredits(args[1], Integer.parseInt(args[2]) * -1);
@@ -102,15 +105,18 @@ public class CreditsCommand implements CommandExecutor {
 				}
 			} else {
 				cs.sendMessage(perm);
+				plugin.log("Player " + cs.getName() + " denied access to command: /credits give " + args[1] + " " + args[2]);
 			}
 			return true;
 		}
 		
 		if (args.length == 1) {
 			if (cs.hasPermission("deathban.credits.check.others")) {
+				plugin.log("[" + cs.getName() + "] Player command: /credits " + args[0]);
 				cs.sendMessage(tag + args[0] + "'s revival credits: " + plugin.getCredits(args[0]));
 			} else {
 				cs.sendMessage(perm);
+				plugin.log("Player " + cs.getName() + " denied access to command: /credits " + args[0]);
 			}
 			return true;
 		}

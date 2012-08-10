@@ -3,7 +3,7 @@ package com.mstiles92.hardcoredeathban;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.logging.Logger;
-
+import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -43,6 +43,12 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 		bans.save();
 	}
 	
+	public void log(String message) {
+		if (this.getConfig().getBoolean("Verbose")) {
+			this.getLogger().info(ChatColor.GREEN + "[HardcoreDeathBan] " + message);
+		}
+	}
+	
 	public Calendar getUnbanDate(String player) {
 		if (player == null) return null;
 		
@@ -69,6 +75,7 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 	}
 	
 	public void removeFromBan(String player) {
+		this.log("Player unbanned: " + player);
 		bans.getConfig().set(player.toLowerCase(), null);
 	}
 	
@@ -85,16 +92,18 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 				if (!p.hasPermission("deathban.ban.exempt")) {
 					if (getCredits(player) > 1) {
 						giveCredits(player, -1);
-						log.info("Player " + player + " used a revival credit. Remaining: " + getCredits(player));
+						this.log("Player used a revival credit: " + player + ", Remaining: " + getCredits(player));
 					} else {
 						bans.getConfig().set(player.toLowerCase(), unbanDate.getTimeInMillis());
 						bans.save();
+						this.log("Player added to ban list: " + player);
 						this.getServer().getScheduler().scheduleSyncDelayedTask(this, new KickRunnable(this, player), this.getConfig().getInt("Tick-Delay"));
 					}
 				}
 			} else {					// Player is offline
 				bans.getConfig().set(player.toLowerCase(), unbanDate.getTimeInMillis());
 				bans.save();
+				this.log("Offline player added to ban list: " + player);
 			}
 		}
 		catch (NumberFormatException e) {
@@ -103,6 +112,7 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 	}
 	
 	public Calendar parseBanTime(String banTime) throws NumberFormatException {
+		
 		Calendar c = Calendar.getInstance();
 		
 		int dayIndex = banTime.indexOf("d");

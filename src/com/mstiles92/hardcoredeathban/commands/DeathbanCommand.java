@@ -22,9 +22,11 @@ public class DeathbanCommand implements CommandExecutor {
 	public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
 		if (args.length < 1) {
 			if (cs.hasPermission("deathban.display")) {
+				plugin.log("[" + cs.getName() + "] Player command: /deathban");
 				// TODO List all commands to player
 			} else {
 				cs.sendMessage(perm);
+				plugin.log("Player " + cs.getName() + " denied access to command: /deathban");
 			}
 			
 			return true;
@@ -32,6 +34,7 @@ public class DeathbanCommand implements CommandExecutor {
 		
 		if (args[0].equalsIgnoreCase("enable")) {
 			if (cs.hasPermission("deathban.enable")) {
+				plugin.log("[" + cs.getName() + "] Player command: /deathban enable");
 				plugin.config.set("Enabled", true);
 				cs.sendMessage(tag + "Enabled!");
 				
@@ -43,16 +46,19 @@ public class DeathbanCommand implements CommandExecutor {
 				}
 			} else {
 				cs.sendMessage(perm);
+				plugin.log("Player " + cs.getName() + " denied access to command: /deathban enable");
 			}
 			return true;
 		}
 		
 		if (args[0].equalsIgnoreCase("disable")) {
 			if (cs.hasPermission("deathban.enable")) {
+				plugin.log("[" + cs.getName() + "] Player command: /deathban disable");
 				plugin.config.set("Enabled", false);
 				cs.sendMessage(tag + "Disabled!");
 			} else {
 				cs.sendMessage(perm);
+				plugin.log("Player " + cs.getName() + " denied access to command: /deathban disable");
 			}
 			return true;
 		}
@@ -63,6 +69,7 @@ public class DeathbanCommand implements CommandExecutor {
 					cs.sendMessage(tag + ChatColor.RED + "You must specify a player.");
 					return true;
 				}
+				plugin.log("[" + cs.getName() + "] Player command: /deathban ban " + args[1]);
 				if (plugin.getServer().getPlayerExact(args[1]).hasPermission("deathban.ban.exempt")) {
 					cs.sendMessage(tag + ChatColor.RED + "This player can not be banned!");
 				} else {
@@ -77,6 +84,7 @@ public class DeathbanCommand implements CommandExecutor {
 				}
 			} else {
 				cs.sendMessage(perm);
+				plugin.log("Player " + cs.getName() + " denied access to command: /deathban ban " + args[1]);
 			}
 			return true;
 		}
@@ -87,7 +95,7 @@ public class DeathbanCommand implements CommandExecutor {
 					cs.sendMessage(tag + ChatColor.RED + "You must specify a player.");
 					return true;
 				}
-				
+				plugin.log("[" + cs.getName() + "] Player command: /deathban unban " + args[1]);
 				if (plugin.isBanned(args[1])) {
 					plugin.removeFromBan(args[1]);
 					cs.sendMessage(tag + args[1] + " has been unbanned.");
@@ -96,6 +104,7 @@ public class DeathbanCommand implements CommandExecutor {
 				}
 			} else {
 				cs.sendMessage(perm);
+				plugin.log("Player " + cs.getName() + " denied access to command: /deathban unban " + args[1]);
 			}
 			return true;
 		}
@@ -106,7 +115,7 @@ public class DeathbanCommand implements CommandExecutor {
 					cs.sendMessage(tag + ChatColor.RED + "You must specify a player.");
 					return true;
 				}
-				
+				plugin.log("[" + cs.getName() + "] Player command: /deathban status " + args[1]);
 				if (plugin.isBanned(args[1])) {
 					String s = "%player% is banned until %unbantime% %unbandate%";
 					cs.sendMessage(tag + plugin.replaceVariables(s, args[1]));
@@ -115,6 +124,7 @@ public class DeathbanCommand implements CommandExecutor {
 				}
 			} else {
 				cs.sendMessage(perm);
+				plugin.log("Player " + cs.getName() + " denied access to command: /deathban status " + args[1]);
 			}
 			return true;
 		}
