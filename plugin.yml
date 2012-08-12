@@ -2,7 +2,7 @@ author: mstiles92
 description: Manages players after death.
 name: HardcoreDeathBan
 main: com.mstiles92.hardcoredeathban.HardcoreDeathBanPlugin
-version: '1.0'
+version: '1.1'
 startup: postworld
 permissions:
   deathban.*:
@@ -53,6 +53,9 @@ permissions:
   deathban.credits.take:
     description: Allow access to take revival credits from players via the /credits take command.
     default: op
+  deathban.class.[class]:
+    description: Sets a player as a member of a death class as defined in config.yml.
+    default: false
 commands:
   deathban:
     description: 

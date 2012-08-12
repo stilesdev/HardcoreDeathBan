@@ -1,6 +1,13 @@
 Enabled: true
-Ban-Time: 1d2h34m
+Ban-Time: 12h
 Death-Message: You have died! You are now banned for %bantimeleft%.
 Early-Message: Your ban is not up for another %bantimeleft%.
 Tick-Delay: 15
 Verbose: false
+Death-Classes:
+  Donator:
+    Ban-Time: 1h
+    Death-Message: Thank you for donating! You are now banned for a reduced time of %bantimeleft%.
+  VIP:
+    Ban-Time: 15m
+    Death-Message: Thank you for being awesome! You are only banned for %bantimeleft%.

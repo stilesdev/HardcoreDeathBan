@@ -3,6 +3,7 @@ package com.mstiles92.hardcoredeathban;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Set;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +19,7 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 
 	public Logger log;
 	public FileConfiguration config;
+	public Set<String> deathClasses;
 	
 	private final SimpleDateFormat TimeFormat = new SimpleDateFormat("hh:mm a z");
 	private final SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -38,6 +40,14 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 		this.getCommand("deathban").setExecutor(new DeathbanCommand(this));
 		this.getCommand("credits").setExecutor(new CreditsCommand(this));
 		
+		this.deathClasses = config.getConfigurationSection("Death-Classes").getKeys(false);
+		if (this.deathClasses.size() == 0) {
+			this.log("No death classes found.");
+		} else {
+			for (String s : this.deathClasses) {
+				this.log("Death class loaded: " + s);
+			}
+		}
 	}
 	
 	public void onDisable() {
@@ -83,6 +93,17 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 	}
 	
 	public void setBanned(String player) {
+		Player p = this.getServer().getPlayerExact(player);
+		if (p != null) {
+			for (String s : this.deathClasses) {
+				if (p.hasPermission("deathban.class." + s)) {
+					this.setBanned(player, config.getString("Death-Classes." + s + ".Ban-Time"));
+					this.log("Death class " + s + " detected for " + player);
+					return;
+				}
+			}
+		}
+		this.log("No death class detected for " + player);
 		this.setBanned(player, config.getString("Ban-Time"));
 	}
 	

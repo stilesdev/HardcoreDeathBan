@@ -19,15 +19,21 @@ public class KickRunnable implements Runnable {
 		Calendar unbanDate = plugin.getUnbanDate(playerName);
 		if (unbanDate != null) {
 			Player p = plugin.getServer().getPlayerExact(playerName);
+			String kickMessage = plugin.config.getString("Death-Message");
 			if (p != null) {
-				String kickMessage = plugin.getConfig().getString("Death-Message");
+				for (String s : plugin.deathClasses) {
+					if (p.hasPermission("deathban.class." + s)) {
+						kickMessage = plugin.config.getString("Death-Classes." + s + ".Death-Message");
+						break;
+					}
+				}
 				p.kickPlayer(plugin.replaceVariables(kickMessage, p.getName()));
-				plugin.log.info("[KickRunnable] Player " + playerName + " kicked.");
+				plugin.log("[KickRunnable] Player " + playerName + " kicked.");
 			} else {
-				plugin.log.info("[KickRunnable] Player " + playerName + " is offline.");
+				plugin.log("[KickRunnable] Player " + playerName + " is offline.");
 			}
 		} else {
-			plugin.log.info("[KickRunnable] Failed to store ban for " + playerName);
+			plugin.log("[KickRunnable] Failed to store ban for " + playerName);
 		}
 	}
 
