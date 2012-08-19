@@ -3,6 +3,7 @@ Ban-Time: 12h
 Death-Message: You have died! You are now banned for %bantimeleft%.
 Early-Message: Your ban is not up for another %bantimeleft%.
 Tick-Delay: 15
+Starting-Credits: 0
 Verbose: false
 Death-Classes:
   Donator:
