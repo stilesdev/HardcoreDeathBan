@@ -30,6 +30,13 @@ public class LoginEvent implements Listener {
 					plugin.removeFromBan(e.getName());
 					e.allow();
 				}
+			} else if(!plugin.playerHasJoined(e.getName())) {
+				int startingCredits = plugin.config.getInt("Starting-Credits");
+				plugin.log("New player recieved " + 
+					    Integer.toString(startingCredits) +
+					    " revival credits upon their first login: " + e.getName());
+				plugin.giveCredits(e.getName(), startingCredits);
+				e.allow();
 			} else {
 				e.allow();
 			}

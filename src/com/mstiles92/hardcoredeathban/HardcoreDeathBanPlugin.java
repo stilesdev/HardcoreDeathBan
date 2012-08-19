@@ -288,4 +288,12 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 		credits.getConfig().set(player.toLowerCase(), credit);
 		credits.save();
 	}
+	
+	public boolean playerHasJoined(String player) {
+		Object o = credits.getConfig().get(player.toLowerCase());
+		if (o != null) {
+			return true;
+		}
+		return false;
+	}
 }
