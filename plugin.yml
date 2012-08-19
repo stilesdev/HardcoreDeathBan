@@ -31,7 +31,7 @@ permissions:
     default: op
   deathban.ban.exempt:
     description: Players with this permission can not be banned and will respawn as normal when killed.
-    default: false
+    default: op
   deathban.unban:
     description: Allow access to manually unban a player via the /deathban unban command.
     default: op

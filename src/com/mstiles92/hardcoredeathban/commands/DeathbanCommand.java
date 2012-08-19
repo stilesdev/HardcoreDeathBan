@@ -23,7 +23,20 @@ public class DeathbanCommand implements CommandExecutor {
 		if (args.length < 1) {
 			if (cs.hasPermission("deathban.display")) {
 				plugin.log("[" + cs.getName() + "] Player command: /deathban");
-				// TODO List all commands to player
+				
+				cs.sendMessage(ChatColor.GREEN + "====[HardcoreDeathBan Help]====");
+				cs.sendMessage(ChatColor.GREEN + "<x> " + ChatColor.DARK_GREEN + "specifies a required parameter, while " + ChatColor.GREEN + "[x] " + ChatColor.DARK_GREEN + "is an optional parameter.");
+				cs.sendMessage(ChatColor.GREEN + "hdb" + ChatColor.DARK_GREEN + " or " + ChatColor.GREEN + "db " + ChatColor.DARK_GREEN + "may be used in place of " + ChatColor.GREEN + "deathban" + ChatColor.DARK_GREEN + " in the commands below.");
+				cs.sendMessage(ChatColor.GREEN + "/deathban enable " + ChatColor.DARK_GREEN + "Enable the plugin server-wide.");
+				cs.sendMessage(ChatColor.GREEN + "/deathban disable " + ChatColor.DARK_GREEN + "Disable the plugin server-wide.");
+				cs.sendMessage(ChatColor.GREEN + "/deathban ban <player> [time] " + ChatColor.DARK_GREEN + "Manually ban a player. Uses default time value if none specified.");
+				cs.sendMessage(ChatColor.GREEN + "/deathban unban <player> " + ChatColor.DARK_GREEN + "Manually unban a banned player.");
+				cs.sendMessage(ChatColor.GREEN + "/deathban status <player> " + ChatColor.DARK_GREEN + "Check the ban status of a player.");
+				cs.sendMessage(ChatColor.GREEN + "/credits [player] " + ChatColor.DARK_GREEN + "Check your own or another player's revival credits.");
+				cs.sendMessage(ChatColor.GREEN + "/credits send <player> <amount> " + ChatColor.DARK_GREEN + "Send some of your own revival credits to another player.");
+				cs.sendMessage(ChatColor.GREEN + "/credits give <player> <amount> " + ChatColor.DARK_GREEN + "Give a player a certain amount of revival credits.");
+				cs.sendMessage(ChatColor.GREEN + "/credits take <player> <amount> " + ChatColor.DARK_GREEN + "Take a certain amount of credits from another player.");
+				
 			} else {
 				cs.sendMessage(perm);
 				plugin.log("Player " + cs.getName() + " denied access to command: /deathban");

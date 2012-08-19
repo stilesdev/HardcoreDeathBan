@@ -10,6 +10,8 @@ import java.util.regex.Pattern;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mstiles92.hardcoredeathban.commands.*;
@@ -96,7 +98,9 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 		Player p = this.getServer().getPlayerExact(player);
 		if (p != null) {
 			for (String s : this.deathClasses) {
-				if (p.hasPermission("deathban.class." + s)) {
+				Permission perm = new Permission("deathban.class." + s);
+				perm.setDefault(PermissionDefault.FALSE);
+				if (p.hasPermission(perm)) {
 					this.setBanned(player, config.getString("Death-Classes." + s + ".Ban-Time"));
 					this.log("Death class " + s + " detected for " + player);
 					return;
