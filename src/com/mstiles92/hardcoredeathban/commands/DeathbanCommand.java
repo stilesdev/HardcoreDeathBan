@@ -49,6 +49,7 @@ public class DeathbanCommand implements CommandExecutor {
 			if (cs.hasPermission("deathban.enable")) {
 				plugin.log("[" + cs.getName() + "] Player command: /deathban enable");
 				plugin.config.set("Enabled", true);
+				plugin.saveConfig();
 				cs.sendMessage(tag + "Enabled!");
 				
 				Player[] plist = plugin.getServer().getOnlinePlayers();
@@ -68,6 +69,7 @@ public class DeathbanCommand implements CommandExecutor {
 			if (cs.hasPermission("deathban.enable")) {
 				plugin.log("[" + cs.getName() + "] Player command: /deathban disable");
 				plugin.config.set("Enabled", false);
+				plugin.saveConfig();
 				cs.sendMessage(tag + "Disabled!");
 			} else {
 				cs.sendMessage(perm);

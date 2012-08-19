@@ -53,7 +53,6 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 	}
 	
 	public void onDisable() {
-		this.saveConfig();
 		credits.save();
 		bans.save();
 	}
