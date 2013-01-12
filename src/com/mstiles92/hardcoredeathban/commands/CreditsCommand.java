@@ -8,12 +8,22 @@ import org.bukkit.entity.Player;
 
 import com.mstiles92.hardcoredeathban.HardcoreDeathBanPlugin;
 
+/**
+ * CreditsCommand is the CommandExecutor that handles all commands dealing
+ * with credits for this plugin.
+ * 
+ * @author mstiles92
+ */
 public class CreditsCommand implements CommandExecutor {
-	
 	private final HardcoreDeathBanPlugin plugin;
 	private final String tag = ChatColor.GREEN + "[HardcoreDeathBan] ";
 	private final String perm = ChatColor.DARK_RED + "You do not have permission to perform this command.";
 	
+	/**
+	 * The main constructor for this class.
+	 * 
+	 * @param plugin the instance of the plugin
+	 */
 	public CreditsCommand(HardcoreDeathBanPlugin plugin) {
 		this.plugin = plugin;
 	}
@@ -24,7 +34,7 @@ public class CreditsCommand implements CommandExecutor {
 			if (cs instanceof Player) {
 				if (cs.hasPermission("deathban.credits.check")) {
 					plugin.log("[" + cs.getName() + "] Player command: /credits");
-					cs.sendMessage(tag + "Revival credits: " + plugin.getCredits(cs.getName()));
+					cs.sendMessage(tag + "Revival credits: " + plugin.credits.getPlayerCredits(cs.getName()));
 				} else {
 					cs.sendMessage(perm);
 					plugin.log("Player " + cs.getName() + " denied access to command: /credits");
@@ -49,9 +59,9 @@ public class CreditsCommand implements CommandExecutor {
 				plugin.log("[" + cs.getName() + "] Player command: /credits send " + args[1] + args[2]);
 				try {
 					if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
-					if (plugin.getCredits(args[1]) >= Integer.parseInt(args[2])) {
-						plugin.giveCredits(cs.getName(), Integer.parseInt(args[2]) * -1);
-						plugin.giveCredits(args[1], Integer.parseInt(args[2]));
+					if (plugin.credits.getPlayerCredits(args[1]) >= Integer.parseInt(args[2])) {
+						plugin.credits.givePlayerCredits(cs.getName(), Integer.parseInt(args[2]) * -1);
+						plugin.credits.givePlayerCredits(args[1], Integer.parseInt(args[2]));
 						cs.sendMessage(tag + "You have successfully sent " + args[1] + " " + args[2] + " revival credits.");
 					} else {
 						cs.sendMessage(tag + ChatColor.RED + "You do not have enough revival credits.");
@@ -76,7 +86,7 @@ public class CreditsCommand implements CommandExecutor {
 				plugin.log("[" + cs.getName() + "] Player command: /credits give " + args[1] + args[2]);
 				try {
 					if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
-					plugin.giveCredits(args[1], Integer.parseInt(args[2]));
+					plugin.credits.givePlayerCredits(args[1], Integer.parseInt(args[2]));
 					cs.sendMessage(tag + "You have successfully given " + args[1] + " " + args[2] + " revival credits.");
 				}
 				catch (NumberFormatException e) {
@@ -97,7 +107,7 @@ public class CreditsCommand implements CommandExecutor {
 				plugin.log("[" + cs.getName() + "] Player command: /credits take " + args[1] + args[2]);
 				try {
 					if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
-					plugin.giveCredits(args[1], Integer.parseInt(args[2]) * -1);
+					plugin.credits.givePlayerCredits(args[1], Integer.parseInt(args[2]) * -1);
 					cs.sendMessage(tag + "You have successfully taken " + args[2] + " revival credits from " + args[1] + ".");
 				}
 				catch (NumberFormatException e) {
@@ -113,15 +123,13 @@ public class CreditsCommand implements CommandExecutor {
 		if (args.length == 1) {
 			if (cs.hasPermission("deathban.credits.check.others")) {
 				plugin.log("[" + cs.getName() + "] Player command: /credits " + args[0]);
-				cs.sendMessage(tag + args[0] + "'s revival credits: " + plugin.getCredits(args[0]));
+				cs.sendMessage(tag + args[0] + "'s revival credits: " + plugin.credits.getPlayerCredits(args[0]));
 			} else {
 				cs.sendMessage(perm);
 				plugin.log("Player " + cs.getName() + " denied access to command: /credits " + args[0]);
 			}
 			return true;
 		}
-		
 		return true;
 	}
-
 }

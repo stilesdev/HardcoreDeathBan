@@ -8,12 +8,22 @@ import org.bukkit.entity.Player;
 
 import com.mstiles92.hardcoredeathban.HardcoreDeathBanPlugin;
 
+/**
+ * DeathbanCommand is the CommandExecutor that handles all commands dealing
+ * with bans for this plugin.
+ * 
+ * @author mstiles92
+ */
 public class DeathbanCommand implements CommandExecutor {
-	
 	private final HardcoreDeathBanPlugin plugin;
 	private final String tag = ChatColor.GREEN + "[HardcoreDeathBan] ";
 	private final String perm = ChatColor.DARK_RED + "You do not have permission to perform this command.";
 	
+	/**
+	 * The main constructor for this class.
+	 * 
+	 * @param plugin the instance of the plugin
+	 */
 	public DeathbanCommand(HardcoreDeathBanPlugin plugin) {
 		this.plugin = plugin;
 	}
@@ -36,26 +46,24 @@ public class DeathbanCommand implements CommandExecutor {
 				cs.sendMessage(ChatColor.GREEN + "/credits send <player> <amount> " + ChatColor.DARK_GREEN + "Send some of your own revival credits to another player.");
 				cs.sendMessage(ChatColor.GREEN + "/credits give <player> <amount> " + ChatColor.DARK_GREEN + "Give a player a certain amount of revival credits.");
 				cs.sendMessage(ChatColor.GREEN + "/credits take <player> <amount> " + ChatColor.DARK_GREEN + "Take a certain amount of credits from another player.");
-				
 			} else {
 				cs.sendMessage(perm);
 				plugin.log("Player " + cs.getName() + " denied access to command: /deathban");
 			}
-			
 			return true;
 		}
 		
 		if (args[0].equalsIgnoreCase("enable")) {
 			if (cs.hasPermission("deathban.enable")) {
 				plugin.log("[" + cs.getName() + "] Player command: /deathban enable");
-				plugin.config.set("Enabled", true);
+				plugin.getConfig().set("Enabled", true);
 				plugin.saveConfig();
 				cs.sendMessage(tag + "Enabled!");
 				
 				Player[] plist = plugin.getServer().getOnlinePlayers();
 				for (Player p : plist) {
-					if (plugin.isBanned(p.getName())) {
-						p.kickPlayer(plugin.replaceVariables(plugin.config.getString("Banned-Message"), p.getName()));
+					if (plugin.bans.checkPlayerIsBanned(p.getName())) {
+						p.kickPlayer(plugin.replaceVariables(plugin.getConfig().getString("Banned-Message"), p.getName()));
 					}
 				}
 			} else {
@@ -68,7 +76,7 @@ public class DeathbanCommand implements CommandExecutor {
 		if (args[0].equalsIgnoreCase("disable")) {
 			if (cs.hasPermission("deathban.enable")) {
 				plugin.log("[" + cs.getName() + "] Player command: /deathban disable");
-				plugin.config.set("Enabled", false);
+				plugin.getConfig().set("Enabled", false);
 				plugin.saveConfig();
 				cs.sendMessage(tag + "Disabled!");
 			} else {
@@ -92,11 +100,11 @@ public class DeathbanCommand implements CommandExecutor {
 						return true;
 					}
 				} 
-				plugin.giveCredits(args[1], plugin.getCredits(args[1]) * -1);
+				plugin.credits.givePlayerCredits(args[1], plugin.credits.getPlayerCredits(args[1]) * -1);
 				if (args.length == 3) {
-					plugin.setBanned(args[1], args[2]);
+					plugin.bans.banPlayer(args[1], args[2]);
 				} else {
-					plugin.setBanned(args[1]);
+					plugin.bans.banPlayer(args[1]);
 				}
 				String s = "%player% is now banned until %unbantime% %unbandate%";
 				cs.sendMessage(tag + plugin.replaceVariables(s, args[1]));
@@ -114,8 +122,8 @@ public class DeathbanCommand implements CommandExecutor {
 					return true;
 				}
 				plugin.log("[" + cs.getName() + "] Player command: /deathban unban " + args[1]);
-				if (plugin.isBanned(args[1])) {
-					plugin.removeFromBan(args[1]);
+				if (plugin.bans.checkPlayerIsBanned(args[1])) {
+					plugin.bans.unbanPlayer(args[1]);
 					cs.sendMessage(tag + args[1] + " has been unbanned.");
 				} else {
 					cs.sendMessage(tag + args[1] + " is not currently banned.");
@@ -134,7 +142,7 @@ public class DeathbanCommand implements CommandExecutor {
 					return true;
 				}
 				plugin.log("[" + cs.getName() + "] Player command: /deathban status " + args[1]);
-				if (plugin.isBanned(args[1])) {
+				if (plugin.bans.checkPlayerIsBanned(args[1])) {
 					String s = "%player% is banned until %unbantime% %unbandate%";
 					cs.sendMessage(tag + plugin.replaceVariables(s, args[1]));
 				} else {
