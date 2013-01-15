@@ -23,10 +23,12 @@
 
 package com.mstiles92.hardcoredeathban;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.mcstats.Metrics;
 
 import com.mstiles92.hardcoredeathban.commands.*;
 
@@ -53,6 +55,13 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 		} catch (Exception e) {
 			getLogger().warning(ChatColor.RED + "Error opening a config file. Plugin will now be disabled.");
 			getPluginLoader().disablePlugin(this);
+		}
+		
+		try {
+			Metrics metrics = new Metrics(this);
+			metrics.start();
+		} catch (IOException e) {
+			getLogger().warning(ChatColor.RED + "Error starting metrics!");
 		}
 		
 		getServer().getPluginManager().registerEvents(new HardcoreDeathBanListener(this), this);
