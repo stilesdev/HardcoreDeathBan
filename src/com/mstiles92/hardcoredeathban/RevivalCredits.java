@@ -82,6 +82,7 @@ public class RevivalCredits {
 	public int getPlayerCredits(String player) {
 		if (!config.contains(player.toLowerCase())) {
 			config.set(player.toLowerCase(), plugin.getConfig().getInt("Starting-Credits"));
+			save();
 		}
 		return config.getInt(player.toLowerCase());
 	}
@@ -95,7 +96,8 @@ public class RevivalCredits {
 		if (!config.contains(player.toLowerCase())) {
 			config.set(player.toLowerCase(), plugin.getConfig().getInt("Starting-Credits"));
 		}
-		config.set(player.toLowerCase(), config.getInt(player.toLowerCase()));
+		config.set(player.toLowerCase(), amount + config.getInt(player.toLowerCase()));
+		save();
 	}
 	
 	/**
@@ -115,6 +117,7 @@ public class RevivalCredits {
 	 */
 	public void setPlayerCredits(String player, int amount) {
 		config.set(player.toLowerCase(), amount);
+		save();
 	}
 	
 	/**

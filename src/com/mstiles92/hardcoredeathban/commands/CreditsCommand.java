@@ -82,7 +82,7 @@ public class CreditsCommand implements CommandExecutor {
 				plugin.log("[" + cs.getName() + "] Player command: /credits send " + args[1] + args[2]);
 				try {
 					if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
-					if (plugin.credits.getPlayerCredits(args[1]) >= Integer.parseInt(args[2])) {
+					if (plugin.credits.getPlayerCredits(cs.getName()) >= Integer.parseInt(args[2])) {
 						plugin.credits.givePlayerCredits(cs.getName(), Integer.parseInt(args[2]) * -1);
 						plugin.credits.givePlayerCredits(args[1], Integer.parseInt(args[2]));
 						cs.sendMessage(tag + "You have successfully sent " + args[1] + " " + args[2] + " revival credits.");

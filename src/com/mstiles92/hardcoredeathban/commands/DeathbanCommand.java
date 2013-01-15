@@ -123,7 +123,7 @@ public class DeathbanCommand implements CommandExecutor {
 						return true;
 					}
 				} 
-				plugin.credits.givePlayerCredits(args[1], plugin.credits.getPlayerCredits(args[1]) * -1);
+
 				if (args.length == 3) {
 					plugin.bans.banPlayer(args[1], args[2]);
 				} else {

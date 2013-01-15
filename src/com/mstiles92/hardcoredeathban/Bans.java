@@ -175,15 +175,10 @@ public class Bans {
 			
 			if (p != null) {			// Player is online
 				if (!p.hasPermission("deathban.ban.exempt")) {
-					if (plugin.credits.getPlayerCredits(player) > 1) {
-						plugin.credits.givePlayerCredits(player, -1);
-						plugin.log("Player used a revival credit: " + player + ", Remaining: " + plugin.credits.getPlayerCredits(player));
-					} else {
-						config.set(player.toLowerCase(), unbanDate.getTimeInMillis());
-						save();
-						plugin.log("Player added to ban list: " + player);
-						plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new KickRunnable(plugin, player), plugin.getConfig().getInt("Tick-Delay"));
-					}
+					config.set(player.toLowerCase(), unbanDate.getTimeInMillis());
+					save();
+					plugin.log("Player added to ban list: " + player);
+					plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new KickRunnable(plugin, player), plugin.getConfig().getInt("Tick-Delay"));
 				}
 			} else {					// Player is offline
 				config.set(player.toLowerCase(), unbanDate.getTimeInMillis());
