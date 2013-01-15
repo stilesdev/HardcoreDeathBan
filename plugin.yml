@@ -53,6 +53,9 @@ permissions:
   deathban.credits.take:
     description: Allow access to take revival credits from players via the /credits take command.
     default: op
+  deathban.receivealerts:
+    description: Receive a notification when there is a new version of the plugin available.
+    default: op
   deathban.class.[class]:
     description: Sets a player as a member of a death class as defined in config.yml.
     default: false

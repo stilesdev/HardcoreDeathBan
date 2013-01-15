@@ -23,10 +23,12 @@
 
 package com.mstiles92.hardcoredeathban;
 
+import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
 /**
@@ -79,6 +81,15 @@ public class HardcoreDeathBanListener implements Listener {
 			} else {
 				e.allow();
 			}
+		}
+	}
+	
+	@EventHandler
+	public void OnPlayerJoin(PlayerJoinEvent e) {
+		if (plugin.updateAvailable && e.getPlayer().hasPermission("deathban.receivealerts")) {
+			e.getPlayer().sendMessage(ChatColor.GREEN + "[HardcoreDeathBan] New version available! See http://dev.bukkit.org/server-mods/hardcoredeathban/ for more information.");
+			e.getPlayer().sendMessage(ChatColor.GREEN + "[HardcoreDeathBan] Current version: " + ChatColor.BLUE + plugin.getDescription().getVersion() + ChatColor.GREEN + ", New version: " + ChatColor.BLUE + plugin.latestKnownVersion);
+			e.getPlayer().sendMessage(ChatColor.GREEN + "[HardcoreDeathBan] Changes in this version: " + ChatColor.BLUE + plugin.changes);
 		}
 	}
 }

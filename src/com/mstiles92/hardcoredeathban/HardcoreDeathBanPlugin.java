@@ -42,6 +42,9 @@ import com.mstiles92.hardcoredeathban.commands.*;
 public class HardcoreDeathBanPlugin extends JavaPlugin {
 	public RevivalCredits credits = null;
 	public Bans bans = null;
+	public String latestKnownVersion;
+	public String changes;
+	public boolean updateAvailable;
 	
 	private final SimpleDateFormat TimeFormat = new SimpleDateFormat("hh:mm a z");
 	private final SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -55,6 +58,11 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 		} catch (Exception e) {
 			getLogger().warning(ChatColor.RED + "Error opening a config file. Plugin will now be disabled.");
 			getPluginLoader().disablePlugin(this);
+		}
+		
+		latestKnownVersion = this.getDescription().getVersion();
+		if (getConfig().getBoolean("Check-for-Updates")) {
+			getServer().getScheduler().runTaskTimer(this, new UpdateChecker(this), 40, 216000);
 		}
 		
 		try {

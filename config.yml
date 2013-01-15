@@ -5,6 +5,7 @@ Early-Message: Your ban is not up for another %bantimeleft%.
 Tick-Delay: 15
 Starting-Credits: 0
 Verbose: false
+Check-for-Updates: true
 Death-Classes:
   Donator:
     Ban-Time: 1h
