@@ -3,10 +3,10 @@
  * HardcoreDeathBan, an open source Bukkit plugin for hardcore-type servers
  * where players are temporarily banned upon death.
  *
- * http://dev.bukkit.org/server-mods/hardcoredeathban/
+ * http://dev.bukkit.org/server-mods/plugins/
  * http://github.com/mstiles92/HardcoreDeathBan
  *
- * Copyright © 2013 Matthew Stiles (mstiles92)
+ * Copyright ï¿½ 2013 Matthew Stiles (mstiles92)
  *
  * Licensed under the Common Development and Distribution License Version 1.0
  * You may not use this file except in compliance with this License.
@@ -21,7 +21,7 @@
  * limitations under the license.
  */
 
-package com.mstiles92.hardcoredeathban.commands;
+package com.mstiles92.plugins.hardcoredeathban.commands;
 
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -29,7 +29,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.mstiles92.hardcoredeathban.HardcoreDeathBanPlugin;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
 
 /**
  * DeathbanCommand is the CommandExecutor that handles all commands dealing

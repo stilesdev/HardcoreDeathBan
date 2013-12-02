@@ -3,10 +3,10 @@
  * HardcoreDeathBan, an open source Bukkit plugin for hardcore-type servers
  * where players are temporarily banned upon death.
  *
- * http://dev.bukkit.org/server-mods/hardcoredeathban/
+ * http://dev.bukkit.org/server-mods/plugins/
  * http://github.com/mstiles92/HardcoreDeathBan
  *
- * Copyright © 2013 Matthew Stiles (mstiles92)
+ * Copyright ï¿½ 2013 Matthew Stiles (mstiles92)
  *
  * Licensed under the Common Development and Distribution License Version 1.0
  * You may not use this file except in compliance with this License.
@@ -21,7 +21,7 @@
  * limitations under the license.
  */
 
-package com.mstiles92.hardcoredeathban;
+package com.mstiles92.plugins.hardcoredeathban;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -39,7 +39,7 @@ import java.net.URLConnection;
  */
 public class UpdateChecker implements Runnable {
 
-	private final String updateAddress = "http://updates.mstiles92.com/updates/hardcoredeathban.txt";
+	private final String updateAddress = "http://updates.mstiles92.com/updates/plugins.txt";
 	private final HardcoreDeathBanPlugin plugin;
 	
 	/**

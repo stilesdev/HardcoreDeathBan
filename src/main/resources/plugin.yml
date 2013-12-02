@@ -1,7 +1,7 @@
 author: mstiles92
 description: Manages players after death.
 name: HardcoreDeathBan
-main: com.mstiles92.hardcoredeathban.HardcoreDeathBanPlugin
+main: com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin
 version: '1.2'
 startup: postworld
 permissions:
