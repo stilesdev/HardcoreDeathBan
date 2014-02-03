@@ -49,9 +49,6 @@ public class HardcoreDeathBan extends JavaPlugin {
 
     public RevivalCredits credits = null;
     public Bans bans = null;
-    public String latestKnownVersion;
-    public String changes;
-    public boolean updateAvailable;
 
     private final SimpleDateFormat TimeFormat = new SimpleDateFormat("hh:mm a z");
     private final SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
@@ -59,8 +56,8 @@ public class HardcoreDeathBan extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        getConfig().options().copyDefaults(true);
-        saveConfig();
+        saveDefaultConfig();
+
         try {
             credits = new RevivalCredits(this, "credits.yml");
             bans = new Bans(this, "bans.yml");
@@ -69,7 +66,6 @@ public class HardcoreDeathBan extends JavaPlugin {
             getPluginLoader().disablePlugin(this);
         }
 
-        latestKnownVersion = this.getDescription().getVersion();
         if (getConfig().getBoolean("Check-for-Updates")) {
             getServer().getScheduler().runTaskTimer(this, new UpdateChecker(), 40, 216000);
         }
