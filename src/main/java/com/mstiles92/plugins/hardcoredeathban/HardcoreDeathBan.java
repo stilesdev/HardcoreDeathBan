@@ -23,6 +23,7 @@
 
 package com.mstiles92.plugins.hardcoredeathban;
 
+import com.mstiles92.plugins.commonutils.calendar.CalendarUtils;
 import com.mstiles92.plugins.hardcoredeathban.commands.Credits;
 import com.mstiles92.plugins.hardcoredeathban.commands.Deathban;
 import com.mstiles92.plugins.hardcoredeathban.listeners.PlayerListener;
@@ -110,7 +111,7 @@ public class HardcoreDeathBan extends JavaPlugin {
         if (unbanTime != null) {
             msg = msg.replaceAll("%unbantime%", TimeFormat.format(unbanTime.getTime()));
             msg = msg.replaceAll("%unbandate%", DateFormat.format(unbanTime.getTime()));
-            msg = msg.replaceAll("%bantimeleft%", Bans.buildTimeDifference(now, unbanTime));
+            msg = msg.replaceAll("%bantimeleft%", CalendarUtils.buildTimeDifference(now, unbanTime));
         }
         return msg;
     }

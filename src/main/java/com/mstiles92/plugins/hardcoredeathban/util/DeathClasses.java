@@ -23,6 +23,7 @@
 
 package com.mstiles92.plugins.hardcoredeathban.util;
 
+import com.mstiles92.plugins.commonutils.calendar.CalendarUtils;
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -121,7 +122,7 @@ public class DeathClasses {
             return null;
         }
         try {
-            return Bans.parseBanTime(unbanTime);
+            return CalendarUtils.parseTimeDifference(unbanTime);
         } catch (Exception e) {
             return null;
         }

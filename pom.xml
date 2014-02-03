@@ -103,5 +103,11 @@
             <version>1.5.1</version>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>com.mstiles92.plugins</groupId>
+            <artifactId>CommonUtils</artifactId>
+            <version>1.0.0</version>
+        </dependency>
     </dependencies>
 </project>
