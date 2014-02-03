@@ -62,6 +62,10 @@ public class UpdateChecker implements Runnable {
         } catch (ParseException e) {
             HardcoreDeathBan.getInstance().getLogger().warning("Error parsing json from BukGet. Please open a bug report at https://github.com/mstiles92/HardcoreDeathBan/issues");
         }
+
+        if (isUpdateAvailable()) {
+            HardcoreDeathBan.getInstance().getLogger().info("Update found! New version " + latestVersionFound + " available at http://dev.bukkit.org/bukkit-plugins/hardcoredeathban/");
+        }
     }
 
     private String getVersion(JSONObject root) {
