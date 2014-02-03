@@ -24,8 +24,11 @@
 package com.mstiles92.plugins.hardcoredeathban.tasks;
 
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
@@ -40,52 +43,48 @@ import java.net.URLConnection;
  * @author mstiles92
  */
 public class UpdateChecker implements Runnable {
+    private static String latestVersionFound;
 
-	private final String updateAddress = "http://updates.mstiles92.com/updates/plugins.txt";
-	private final HardcoreDeathBan plugin;
-	
-	/**
-	 * The main constructor of this class
-	 * 
-	 * @param plugin the instance of the plugin
-	 */
-	public UpdateChecker(HardcoreDeathBan plugin) {
-		this.plugin = plugin;
-	}
-	
-	@Override
-	public void run() {
-		plugin.log("Starting UpdateChecker.");
-		
-		try {
-			URL url = new URL(updateAddress);
-			URLConnection connection = url.openConnection();
-			connection.setConnectTimeout(5000);
-			connection.setReadTimeout(10000);
-			BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-			String version = reader.readLine();
-			String changes = reader.readLine();
-			plugin.log("Version found: " + version);
-			plugin.log("Changes: " + changes);
-			
-			if (version != null) {
-				plugin.latestKnownVersion = version;
-				plugin.changes = changes;
-				
-				if (!plugin.getDescription().getVersion().equalsIgnoreCase(version)) {
-					plugin.updateAvailable = true;
-					
-					plugin.getLogger().info("Update available! New version: " + version);
-					plugin.getLogger().info("Changes in this version: " + changes);
-				} else {
-					plugin.log("HardcoreDeathBan already up to date!");
-				}
-				return;
-			}
-		} catch (IOException e) {
-			
-		}
-		plugin.getLogger().info("Error: Unable to check for updates. Will check again later.");
-	}
+    @Override
+    public void run() {
+        if (HardcoreDeathBan.getInstance().getDescription().getVersion().contains("SNAPSHOT")) {
+            return;
+        }
 
+        try {
+            URLConnection connection = new URL("http://api.bukget.org/3/plugins/bukkit/hardcoredeathban/latest").openConnection();
+            connection.setConnectTimeout(5000);
+            connection.setReadTimeout(10000);
+            JSONObject root = (JSONObject) new JSONParser().parse(new InputStreamReader(connection.getInputStream()));
+            latestVersionFound = getVersion(root);
+        } catch (IOException e) {
+            HardcoreDeathBan.getInstance().getLogger().info("Error checking for update - BukGet may be experiencing issues. Will try again later.");
+        } catch (ParseException e) {
+            HardcoreDeathBan.getInstance().getLogger().warning("Error parsing json from BukGet. Please open a bug report at https://github.com/mstiles92/HardcoreDeathBan/issues");
+        }
+    }
+
+    private String getVersion(JSONObject root) {
+        JSONArray versions = (JSONArray) root.get("versions");
+        JSONObject latestVersion = (JSONObject) versions.get(0);
+        return (String) latestVersion.get("dbo_version");
+    }
+
+    public static String getLatestVersionFound() {
+        return latestVersionFound;
+    }
+
+    public static boolean isUpdateAvailable() {
+        String currentVersion = HardcoreDeathBan.getInstance().getDescription().getVersion();
+
+        if (currentVersion.contains("SNAPSHOT")) {
+            return false;
+        }
+
+        if (latestVersionFound == null) {
+            return false;
+        }
+
+        return latestVersionFound != currentVersion; //TODO: Better to check that latestVersionFound > currentVersion
+    }
 }

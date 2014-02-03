@@ -45,6 +45,8 @@ import com.mstiles92.plugins.hardcoredeathban.commands.*;
  * @author mstiles92
  */
 public class HardcoreDeathBan extends JavaPlugin {
+    private static HardcoreDeathBan instance;
+
 	public RevivalCredits credits = null;
 	public Bans bans = null;
 	public String latestKnownVersion;
@@ -55,6 +57,8 @@ public class HardcoreDeathBan extends JavaPlugin {
 	private final SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
 	
 	public void onEnable() {
+        instance = this;
+
 		getConfig().options().copyDefaults(true);
 		saveConfig();
 		try {
@@ -67,7 +71,7 @@ public class HardcoreDeathBan extends JavaPlugin {
 		
 		latestKnownVersion = this.getDescription().getVersion();
 		if (getConfig().getBoolean("Check-for-Updates")) {
-			getServer().getScheduler().runTaskTimer(this, new UpdateChecker(this), 40, 216000);
+			getServer().getScheduler().runTaskTimer(this, new UpdateChecker(), 40, 216000);
 		}
 		
 		try {
@@ -114,4 +118,8 @@ public class HardcoreDeathBan extends JavaPlugin {
 		}
 		return msg;
 	}
+
+    public static HardcoreDeathBan getInstance() {
+        return instance;
+    }
 }
