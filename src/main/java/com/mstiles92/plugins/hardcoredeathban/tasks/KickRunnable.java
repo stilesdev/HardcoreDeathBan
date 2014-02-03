@@ -23,52 +23,52 @@
 
 package com.mstiles92.plugins.hardcoredeathban.tasks;
 
-import java.util.Calendar;
-
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.entity.Player;
+
+import java.util.Calendar;
 
 /**
  * KickRunnable is a class that implements the Runnable interface, used to
  * kick the player after a short delay when getting banned after death.
- * 
+ *
  * @author mstiles92
  */
 public class KickRunnable implements Runnable {
-	private final HardcoreDeathBan plugin;
-	private final String playerName;
-	
-	/**
-	 * The main constructor for this class.
-	 * 
-	 * @param plugin the instance of the plugin
-	 * @param playerName the name of the player to kick
-	 */
-	public KickRunnable(HardcoreDeathBan plugin, String playerName) {
-		this.plugin = plugin;
-		this.playerName = playerName;
-	}
+    private final HardcoreDeathBan plugin;
+    private final String playerName;
 
-	@Override
-	public void run() {
-		Calendar unbanDate = plugin.bans.getUnbanCalendar(playerName);
-		if (unbanDate != null) {
-			Player p = plugin.getServer().getPlayerExact(playerName);
-			String kickMessage = plugin.getConfig().getString("Death-Message");
-			if (p != null) {
-				for (String s : plugin.bans.deathClasses) {
-					if (p.hasPermission("deathban.class." + s)) {
-						kickMessage = plugin.getConfig().getString("Death-Classes." + s + ".Death-Message");
-						break;
-					}
-				}
-				p.kickPlayer(plugin.replaceVariables(kickMessage, p.getName()));
-				plugin.log("[KickRunnable] Player " + playerName + " kicked.");
-			} else {
-				plugin.log("[KickRunnable] Player " + playerName + " is offline.");
-			}
-		} else {
-			plugin.log("[KickRunnable] Failed to store ban for " + playerName);
-		}
-	}
+    /**
+     * The main constructor for this class.
+     *
+     * @param plugin     the instance of the plugin
+     * @param playerName the name of the player to kick
+     */
+    public KickRunnable(HardcoreDeathBan plugin, String playerName) {
+        this.plugin = plugin;
+        this.playerName = playerName;
+    }
+
+    @Override
+    public void run() {
+        Calendar unbanDate = plugin.bans.getUnbanCalendar(playerName);
+        if (unbanDate != null) {
+            Player p = plugin.getServer().getPlayerExact(playerName);
+            String kickMessage = plugin.getConfig().getString("Death-Message");
+            if (p != null) {
+                for (String s : plugin.bans.deathClasses) {
+                    if (p.hasPermission("deathban.class." + s)) {
+                        kickMessage = plugin.getConfig().getString("Death-Classes." + s + ".Death-Message");
+                        break;
+                    }
+                }
+                p.kickPlayer(plugin.replaceVariables(kickMessage, p.getName()));
+                plugin.log("[KickRunnable] Player " + playerName + " kicked.");
+            } else {
+                plugin.log("[KickRunnable] Player " + playerName + " is offline.");
+            }
+        } else {
+            plugin.log("[KickRunnable] Failed to store ban for " + playerName);
+        }
+    }
 }

@@ -39,7 +39,7 @@ import java.net.URLConnection;
  * against the latest available version. If there is an update available,
  * it sets the plugin to notify staff of the update, as well as the changes
  * in the new version.
- * 
+ *
  * @author mstiles92
  */
 public class UpdateChecker implements Runnable {

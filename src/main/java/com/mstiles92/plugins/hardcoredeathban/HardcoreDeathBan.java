@@ -23,10 +23,8 @@
 
 package com.mstiles92.plugins.hardcoredeathban;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-
+import com.mstiles92.plugins.hardcoredeathban.commands.Credits;
+import com.mstiles92.plugins.hardcoredeathban.commands.Deathban;
 import com.mstiles92.plugins.hardcoredeathban.listeners.PlayerListener;
 import com.mstiles92.plugins.hardcoredeathban.tasks.UpdateChecker;
 import com.mstiles92.plugins.hardcoredeathban.util.Bans;
@@ -35,89 +33,91 @@ import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
-import com.mstiles92.plugins.hardcoredeathban.commands.*;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  * HardcoreDeathBan is the main class of this Bukkit plugin.
  * It handles enabling and disabling of this plugin, loading config
  * files, and other general methods needed for this plugin's operation.
- * 
+ *
  * @author mstiles92
  */
 public class HardcoreDeathBan extends JavaPlugin {
     private static HardcoreDeathBan instance;
 
-	public RevivalCredits credits = null;
-	public Bans bans = null;
-	public String latestKnownVersion;
-	public String changes;
-	public boolean updateAvailable;
-	
-	private final SimpleDateFormat TimeFormat = new SimpleDateFormat("hh:mm a z");
-	private final SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
-	
-	public void onEnable() {
+    public RevivalCredits credits = null;
+    public Bans bans = null;
+    public String latestKnownVersion;
+    public String changes;
+    public boolean updateAvailable;
+
+    private final SimpleDateFormat TimeFormat = new SimpleDateFormat("hh:mm a z");
+    private final SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
+
+    public void onEnable() {
         instance = this;
 
-		getConfig().options().copyDefaults(true);
-		saveConfig();
-		try {
-			credits = new RevivalCredits(this, "credits.yml");
-			bans = new Bans(this, "bans.yml");
-		} catch (Exception e) {
-			getLogger().warning(ChatColor.RED + "Error opening a config file. Plugin will now be disabled.");
-			getPluginLoader().disablePlugin(this);
-		}
-		
-		latestKnownVersion = this.getDescription().getVersion();
-		if (getConfig().getBoolean("Check-for-Updates")) {
-			getServer().getScheduler().runTaskTimer(this, new UpdateChecker(), 40, 216000);
-		}
-		
-		try {
-			Metrics metrics = new Metrics(this);
-			metrics.start();
-		} catch (IOException e) {
-			getLogger().warning(ChatColor.RED + "Error starting metrics!");
-		}
-		
-		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-		
-		getCommand("deathban").setExecutor(new Deathban(this));
-		getCommand("credits").setExecutor(new Credits(this));
-	}
-	
-	public void onDisable() {
-		credits.save();
-		bans.save();
-		saveConfig();
-	}
-	
-	public void log(String message) {
-		if (getConfig().getBoolean("Verbose")) {
-			getLogger().info(message);
-		}
-	}
-	
-	public String replaceVariables(String msg, String name) {
-		final Calendar now = Calendar.getInstance();
-		final Calendar unbanTime = bans.getUnbanCalendar(name);
-		
-		msg = msg.replaceAll("%server%", this.getServer().getServerName());
-		if (name != null) {
-			msg = msg.replaceAll("%player%", name);
-		}
-		
-		msg = msg.replaceAll("%currenttime%", TimeFormat.format(now.getTime()));
-		msg = msg.replaceAll("%currentdate%", DateFormat.format(now.getTime()));
-		
-		if (unbanTime != null) {
-			msg = msg.replaceAll("%unbantime%", TimeFormat.format(unbanTime.getTime()));
-			msg = msg.replaceAll("%unbandate%", DateFormat.format(unbanTime.getTime()));
-			msg = msg.replaceAll("%bantimeleft%", Bans.buildTimeDifference(now, unbanTime));
-		}
-		return msg;
-	}
+        getConfig().options().copyDefaults(true);
+        saveConfig();
+        try {
+            credits = new RevivalCredits(this, "credits.yml");
+            bans = new Bans(this, "bans.yml");
+        } catch (Exception e) {
+            getLogger().warning(ChatColor.RED + "Error opening a config file. Plugin will now be disabled.");
+            getPluginLoader().disablePlugin(this);
+        }
+
+        latestKnownVersion = this.getDescription().getVersion();
+        if (getConfig().getBoolean("Check-for-Updates")) {
+            getServer().getScheduler().runTaskTimer(this, new UpdateChecker(), 40, 216000);
+        }
+
+        try {
+            Metrics metrics = new Metrics(this);
+            metrics.start();
+        } catch (IOException e) {
+            getLogger().warning(ChatColor.RED + "Error starting metrics!");
+        }
+
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+
+        getCommand("deathban").setExecutor(new Deathban(this));
+        getCommand("credits").setExecutor(new Credits(this));
+    }
+
+    public void onDisable() {
+        credits.save();
+        bans.save();
+        saveConfig();
+    }
+
+    public void log(String message) {
+        if (getConfig().getBoolean("Verbose")) {
+            getLogger().info(message);
+        }
+    }
+
+    public String replaceVariables(String msg, String name) {
+        final Calendar now = Calendar.getInstance();
+        final Calendar unbanTime = bans.getUnbanCalendar(name);
+
+        msg = msg.replaceAll("%server%", this.getServer().getServerName());
+        if (name != null) {
+            msg = msg.replaceAll("%player%", name);
+        }
+
+        msg = msg.replaceAll("%currenttime%", TimeFormat.format(now.getTime()));
+        msg = msg.replaceAll("%currentdate%", DateFormat.format(now.getTime()));
+
+        if (unbanTime != null) {
+            msg = msg.replaceAll("%unbantime%", TimeFormat.format(unbanTime.getTime()));
+            msg = msg.replaceAll("%unbandate%", DateFormat.format(unbanTime.getTime()));
+            msg = msg.replaceAll("%bantimeleft%", Bans.buildTimeDifference(now, unbanTime));
+        }
+        return msg;
+    }
 
     public static HardcoreDeathBan getInstance() {
         return instance;
