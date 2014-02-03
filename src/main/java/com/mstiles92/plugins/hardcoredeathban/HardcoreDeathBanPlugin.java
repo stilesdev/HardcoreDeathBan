@@ -26,6 +26,11 @@ package com.mstiles92.plugins.hardcoredeathban;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+
+import com.mstiles92.plugins.hardcoredeathban.listeners.PlayerListener;
+import com.mstiles92.plugins.hardcoredeathban.tasks.UpdateChecker;
+import com.mstiles92.plugins.hardcoredeathban.util.Bans;
+import com.mstiles92.plugins.hardcoredeathban.util.RevivalCredits;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
@@ -72,10 +77,10 @@ public class HardcoreDeathBanPlugin extends JavaPlugin {
 			getLogger().warning(ChatColor.RED + "Error starting metrics!");
 		}
 		
-		getServer().getPluginManager().registerEvents(new HardcoreDeathBanListener(this), this);
+		getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 		
-		getCommand("deathban").setExecutor(new DeathbanCommand(this));
-		getCommand("credits").setExecutor(new CreditsCommand(this));
+		getCommand("deathban").setExecutor(new Deathban(this));
+		getCommand("credits").setExecutor(new Credits(this));
 	}
 	
 	public void onDisable() {

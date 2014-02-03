@@ -21,8 +21,9 @@
  * limitations under the license.
  */
 
-package com.mstiles92.plugins.hardcoredeathban;
+package com.mstiles92.plugins.hardcoredeathban.listeners;
 
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -32,12 +33,12 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 
 /**
- * HardcoreDeathBanListener is the class used to register the event handlers
+ * PlayerListener is the class used to register the event handlers
  * needed for this plugin's operation.
  * 
  * @author mstiles92
  */
-public class HardcoreDeathBanListener implements Listener {
+public class PlayerListener implements Listener {
 	private final HardcoreDeathBanPlugin plugin;
 	
 	/**
@@ -45,7 +46,7 @@ public class HardcoreDeathBanListener implements Listener {
 	 * 
 	 * @param plugin the instance of the plugin
 	 */
-	public HardcoreDeathBanListener(HardcoreDeathBanPlugin plugin) {
+	public PlayerListener(HardcoreDeathBanPlugin plugin) {
 		this.plugin = plugin;
 	}
 	
@@ -85,7 +86,7 @@ public class HardcoreDeathBanListener implements Listener {
 	}
 	
 	@EventHandler
-	public void OnPlayerJoin(PlayerJoinEvent e) {
+	public void onPlayerJoin(PlayerJoinEvent e) {
 		if (plugin.updateAvailable && e.getPlayer().hasPermission("deathban.receivealerts")) {
 			e.getPlayer().sendMessage(ChatColor.GREEN + "[HardcoreDeathBan] New version available! See http://dev.bukkit.org/server-mods/plugins/ for more information.");
 			e.getPlayer().sendMessage(ChatColor.GREEN + "[HardcoreDeathBan] Current version: " + ChatColor.BLUE + plugin.getDescription().getVersion() + ChatColor.GREEN + ", New version: " + ChatColor.BLUE + plugin.latestKnownVersion);

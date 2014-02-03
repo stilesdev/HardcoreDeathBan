@@ -32,12 +32,12 @@ import org.bukkit.entity.Player;
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
 
 /**
- * DeathbanCommand is the CommandExecutor that handles all commands dealing
+ * Deathban is the CommandExecutor that handles all commands dealing
  * with bans for this plugin.
  * 
  * @author mstiles92
  */
-public class DeathbanCommand implements CommandExecutor {
+public class Deathban implements CommandExecutor {
 	private final HardcoreDeathBanPlugin plugin;
 	private final String tag = ChatColor.GREEN + "[HardcoreDeathBan] ";
 	private final String perm = ChatColor.DARK_RED + "You do not have permission to perform this command.";
@@ -47,7 +47,7 @@ public class DeathbanCommand implements CommandExecutor {
 	 * 
 	 * @param plugin the instance of the plugin
 	 */
-	public DeathbanCommand(HardcoreDeathBanPlugin plugin) {
+	public Deathban(HardcoreDeathBanPlugin plugin) {
 		this.plugin = plugin;
 	}
 

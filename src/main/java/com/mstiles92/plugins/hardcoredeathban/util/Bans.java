@@ -21,7 +21,7 @@
  * limitations under the license.
  */
 
-package com.mstiles92.plugins.hardcoredeathban;
+package com.mstiles92.plugins.hardcoredeathban.util;
 
 import java.io.File;
 import java.io.IOException;
@@ -31,6 +31,8 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
+import com.mstiles92.plugins.hardcoredeathban.tasks.KickRunnable;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;

@@ -21,7 +21,9 @@
  * limitations under the license.
  */
 
-package com.mstiles92.plugins.hardcoredeathban;
+package com.mstiles92.plugins.hardcoredeathban.tasks;
+
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
 
 import java.io.BufferedReader;
 import java.io.IOException;

@@ -21,11 +21,12 @@
  * limitations under the license.
  */
 
-package com.mstiles92.plugins.hardcoredeathban;
+package com.mstiles92.plugins.hardcoredeathban.util;
 
 import java.io.File;
 import java.io.IOException;
 
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
