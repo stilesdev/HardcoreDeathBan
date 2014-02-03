@@ -23,7 +23,7 @@
 
 package com.mstiles92.plugins.hardcoredeathban.tasks;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -42,14 +42,14 @@ import java.net.URLConnection;
 public class UpdateChecker implements Runnable {
 
 	private final String updateAddress = "http://updates.mstiles92.com/updates/plugins.txt";
-	private final HardcoreDeathBanPlugin plugin;
+	private final HardcoreDeathBan plugin;
 	
 	/**
 	 * The main constructor of this class
 	 * 
 	 * @param plugin the instance of the plugin
 	 */
-	public UpdateChecker(HardcoreDeathBanPlugin plugin) {
+	public UpdateChecker(HardcoreDeathBan plugin) {
 		this.plugin = plugin;
 	}
 	

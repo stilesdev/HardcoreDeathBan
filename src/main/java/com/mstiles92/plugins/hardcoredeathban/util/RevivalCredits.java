@@ -26,7 +26,7 @@ package com.mstiles92.plugins.hardcoredeathban.util;
 import java.io.File;
 import java.io.IOException;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -38,7 +38,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
  */
 public class RevivalCredits {
 	
-	private final HardcoreDeathBanPlugin plugin;
+	private final HardcoreDeathBan plugin;
 	private YamlConfiguration config;
 	private File file;
 	
@@ -48,7 +48,7 @@ public class RevivalCredits {
 	 * @param filename name of the file to save to disk
 	 * @throws Exception if there is an error while opening or creating the file
 	 */
-	public RevivalCredits(HardcoreDeathBanPlugin plugin, String filename) throws Exception {
+	public RevivalCredits(HardcoreDeathBan plugin, String filename) throws Exception {
 		this.plugin = plugin;
 		load(filename);
 	}

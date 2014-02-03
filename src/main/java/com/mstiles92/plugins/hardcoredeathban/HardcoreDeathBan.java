@@ -38,13 +38,13 @@ import org.mcstats.Metrics;
 import com.mstiles92.plugins.hardcoredeathban.commands.*;
 
 /**
- * HardcoreDeathBanPlugin is the main class of this Bukkit plugin.
+ * HardcoreDeathBan is the main class of this Bukkit plugin.
  * It handles enabling and disabling of this plugin, loading config
  * files, and other general methods needed for this plugin's operation.
  * 
  * @author mstiles92
  */
-public class HardcoreDeathBanPlugin extends JavaPlugin {
+public class HardcoreDeathBan extends JavaPlugin {
 	public RevivalCredits credits = null;
 	public Bans bans = null;
 	public String latestKnownVersion;

@@ -28,7 +28,7 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.Set;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
@@ -41,7 +41,7 @@ import org.bukkit.configuration.file.YamlConfiguration;
  * @author mstiles92
  */
 public class DeathClasses {
-	private final HardcoreDeathBanPlugin plugin;
+	private final HardcoreDeathBan plugin;
 	private File file;
 	private YamlConfiguration config;
 	private Set<String> classes;
@@ -53,7 +53,7 @@ public class DeathClasses {
 	 * @param filename the name of the file to save to disk
 	 * @throws Exception if there is an error while opening or creating the file
 	 */
-	public DeathClasses(HardcoreDeathBanPlugin plugin, String filename) throws Exception {
+	public DeathClasses(HardcoreDeathBan plugin, String filename) throws Exception {
 		this.plugin = plugin;
 		load(filename);
 	}

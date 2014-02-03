@@ -23,7 +23,7 @@
 
 package com.mstiles92.plugins.hardcoredeathban.listeners;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -39,14 +39,14 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
  * @author mstiles92
  */
 public class PlayerListener implements Listener {
-	private final HardcoreDeathBanPlugin plugin;
+	private final HardcoreDeathBan plugin;
 	
 	/**
 	 * The main constructor used for this class.
 	 * 
 	 * @param plugin the instance of the plugin
 	 */
-	public PlayerListener(HardcoreDeathBanPlugin plugin) {
+	public PlayerListener(HardcoreDeathBan plugin) {
 		this.plugin = plugin;
 	}
 	

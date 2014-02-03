@@ -29,7 +29,7 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 
 /**
  * Credits is the CommandExecutor that handles all commands dealing
@@ -38,7 +38,7 @@ import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
  * @author mstiles92
  */
 public class Credits implements CommandExecutor {
-	private final HardcoreDeathBanPlugin plugin;
+	private final HardcoreDeathBan plugin;
 	private final String tag = ChatColor.GREEN + "[HardcoreDeathBan] ";
 	private final String perm = ChatColor.DARK_RED + "You do not have permission to perform this command.";
 	
@@ -47,7 +47,7 @@ public class Credits implements CommandExecutor {
 	 * 
 	 * @param plugin the instance of the plugin
 	 */
-	public Credits(HardcoreDeathBanPlugin plugin) {
+	public Credits(HardcoreDeathBan plugin) {
 		this.plugin = plugin;
 	}
 

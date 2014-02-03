@@ -23,13 +23,12 @@
 
 package com.mstiles92.plugins.hardcoredeathban.commands;
 
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
 
 /**
  * Deathban is the CommandExecutor that handles all commands dealing
@@ -38,7 +37,7 @@ import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
  * @author mstiles92
  */
 public class Deathban implements CommandExecutor {
-	private final HardcoreDeathBanPlugin plugin;
+	private final HardcoreDeathBan plugin;
 	private final String tag = ChatColor.GREEN + "[HardcoreDeathBan] ";
 	private final String perm = ChatColor.DARK_RED + "You do not have permission to perform this command.";
 	
@@ -47,7 +46,7 @@ public class Deathban implements CommandExecutor {
 	 * 
 	 * @param plugin the instance of the plugin
 	 */
-	public Deathban(HardcoreDeathBanPlugin plugin) {
+	public Deathban(HardcoreDeathBan plugin) {
 		this.plugin = plugin;
 	}
 

@@ -31,7 +31,7 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import com.mstiles92.plugins.hardcoredeathban.tasks.KickRunnable;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -47,7 +47,7 @@ import org.bukkit.permissions.PermissionDefault;
 public class Bans {
 	public Set<String> deathClasses;
 	
-	private final HardcoreDeathBanPlugin plugin;
+	private final HardcoreDeathBan plugin;
 	private YamlConfiguration config;
 	private File file;
 	
@@ -58,7 +58,7 @@ public class Bans {
 	 * @param filename name of the file to save to disk
 	 * @throws Exception if there is an error while opening or creating the file
 	 */
-	public Bans(HardcoreDeathBanPlugin plugin, String filename) throws Exception {
+	public Bans(HardcoreDeathBan plugin, String filename) throws Exception {
 		this.plugin = plugin;
 		load(filename);
 		

@@ -25,7 +25,7 @@ package com.mstiles92.plugins.hardcoredeathban.tasks;
 
 import java.util.Calendar;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBanPlugin;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.entity.Player;
 
 /**
@@ -35,7 +35,7 @@ import org.bukkit.entity.Player;
  * @author mstiles92
  */
 public class KickRunnable implements Runnable {
-	private final HardcoreDeathBanPlugin plugin;
+	private final HardcoreDeathBan plugin;
 	private final String playerName;
 	
 	/**
@@ -44,7 +44,7 @@ public class KickRunnable implements Runnable {
 	 * @param plugin the instance of the plugin
 	 * @param playerName the name of the player to kick
 	 */
-	public KickRunnable(HardcoreDeathBanPlugin plugin, String playerName) {
+	public KickRunnable(HardcoreDeathBan plugin, String playerName) {
 		this.plugin = plugin;
 		this.playerName = playerName;
 	}
