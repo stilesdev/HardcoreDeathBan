@@ -54,6 +54,10 @@
             <id>mcstats-repo</id>
             <url>http://repo.mcstats.org/content/repositories/public/</url>
         </repository>
+        <repository>
+        	<id>mstiles92-repo</id>
+        	<url>http://repo.mstiles92.com/artifactory/bukkit-public</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -107,7 +111,7 @@
         <dependency>
             <groupId>com.mstiles92.plugins</groupId>
             <artifactId>CommonUtils</artifactId>
-            <version>1.0.0</version>
+            <version>1.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>
