@@ -23,8 +23,8 @@
 
 package com.mstiles92.plugins.hardcoredeathban.listeners;
 
+import com.mstiles92.plugins.commonutils.updates.UpdateChecker;
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
-import com.mstiles92.plugins.hardcoredeathban.tasks.UpdateChecker;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -88,9 +88,9 @@ public class PlayerListener implements Listener {
 
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent e) {
-        if (UpdateChecker.isUpdateAvailable() && e.getPlayer().hasPermission("deathban.receivealerts")) {
+        if (HardcoreDeathBan.getInstance().getUpdateChecker().isUpdateAvailable() && e.getPlayer().hasPermission("deathban.receivealerts")) {
             e.getPlayer().sendMessage(ChatColor.GREEN + "[HardcoreDeathBan] New version available! See http://dev.bukkit.org/bukkit-plugins/hardcoredeathban/ for more information.");
-            e.getPlayer().sendMessage(ChatColor.GREEN + "[HardcoreDeathBan] Current version: " + ChatColor.BLUE + plugin.getDescription().getVersion() + ChatColor.GREEN + ", New version: " + ChatColor.BLUE + UpdateChecker.getLatestVersionFound());
+            e.getPlayer().sendMessage(ChatColor.GREEN + "[HardcoreDeathBan] Current version: " + ChatColor.BLUE + plugin.getDescription().getVersion() + ChatColor.GREEN + ", New version: " + ChatColor.BLUE + HardcoreDeathBan.getInstance().getUpdateChecker().getNewVersion());
         }
     }
 }

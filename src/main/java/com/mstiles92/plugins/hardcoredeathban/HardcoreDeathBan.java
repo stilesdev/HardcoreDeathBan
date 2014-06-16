@@ -24,10 +24,10 @@
 package com.mstiles92.plugins.hardcoredeathban;
 
 import com.mstiles92.plugins.commonutils.calendar.CalendarUtils;
+import com.mstiles92.plugins.commonutils.updates.UpdateChecker;
 import com.mstiles92.plugins.hardcoredeathban.commands.Credits;
 import com.mstiles92.plugins.hardcoredeathban.commands.Deathban;
 import com.mstiles92.plugins.hardcoredeathban.listeners.PlayerListener;
-import com.mstiles92.plugins.hardcoredeathban.tasks.UpdateChecker;
 import com.mstiles92.plugins.hardcoredeathban.util.Bans;
 import com.mstiles92.plugins.hardcoredeathban.util.RevivalCredits;
 import org.bukkit.ChatColor;
@@ -47,6 +47,7 @@ import java.util.Calendar;
  */
 public class HardcoreDeathBan extends JavaPlugin {
     private static HardcoreDeathBan instance;
+    private UpdateChecker updateChecker;
 
     public RevivalCredits credits = null;
     public Bans bans = null;
@@ -68,7 +69,8 @@ public class HardcoreDeathBan extends JavaPlugin {
         }
 
         if (getConfig().getBoolean("Check-for-Updates")) {
-            getServer().getScheduler().runTaskTimer(this, new UpdateChecker(), 40, 216000);
+            updateChecker = new UpdateChecker("hardcoredeathban", getLogger(), getDescription().getVersion());
+            getServer().getScheduler().runTaskTimer(this, updateChecker, 40, 216000);
         }
 
         try {
@@ -114,6 +116,10 @@ public class HardcoreDeathBan extends JavaPlugin {
             msg = msg.replaceAll("%bantimeleft%", CalendarUtils.buildTimeDifference(now, unbanTime));
         }
         return msg;
+    }
+
+    public UpdateChecker getUpdateChecker() {
+        return updateChecker;
     }
 
     public static HardcoreDeathBan getInstance() {
