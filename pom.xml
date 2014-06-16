@@ -6,7 +6,7 @@
 
     <groupId>com.mstiles92.plugins</groupId>
     <artifactId>HardcoreDeathBan</artifactId>
-    <version>1.3.0-SNAPSHOT</version>
+    <version>1.2.1-SNAPSHOT</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -42,6 +42,27 @@
                     <showDeprecation>true</showDeprecation>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>2.1</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <artifactSet>
+                                <includes>
+                                    <include>com.mstiles92.plugins:CommonUtils</include>
+                                </includes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
 
@@ -64,14 +85,13 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.7.2-R0.2</version>
-            <scope>compile</scope>
+            <version>1.7.9-R0.2</version>
         </dependency>
 
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.7.2-R0.2</version>
+            <version>1.7.9-R0.2</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -111,7 +131,7 @@
         <dependency>
             <groupId>com.mstiles92.plugins</groupId>
             <artifactId>CommonUtils</artifactId>
-            <version>1.0.1-SNAPSHOT</version>
+            <version>1.0.4</version>
         </dependency>
     </dependencies>
 </project>
