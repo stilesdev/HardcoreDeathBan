@@ -1,4 +1,4 @@
-/**
+/*
  * This document is a part of the source code and related artifacts for
  * HardcoreDeathBan, an open source Bukkit plugin for hardcore-type servers
  * where players are temporarily banned upon death.
