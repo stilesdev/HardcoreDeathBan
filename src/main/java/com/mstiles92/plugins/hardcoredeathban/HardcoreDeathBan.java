@@ -24,6 +24,7 @@
 package com.mstiles92.plugins.hardcoredeathban;
 
 import com.mstiles92.plugins.commonutils.calendar.CalendarUtils;
+import com.mstiles92.plugins.commonutils.commands.CommandRegistry;
 import com.mstiles92.plugins.commonutils.updates.UpdateChecker;
 import com.mstiles92.plugins.hardcoredeathban.commands.Credits;
 import com.mstiles92.plugins.hardcoredeathban.commands.Deathban;
@@ -31,6 +32,8 @@ import com.mstiles92.plugins.hardcoredeathban.listeners.PlayerListener;
 import com.mstiles92.plugins.hardcoredeathban.util.Bans;
 import com.mstiles92.plugins.hardcoredeathban.util.RevivalCredits;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
@@ -48,6 +51,7 @@ import java.util.Calendar;
 public class HardcoreDeathBan extends JavaPlugin {
     private static HardcoreDeathBan instance;
     private UpdateChecker updateChecker;
+    private CommandRegistry commandRegistry;
 
     public RevivalCredits credits = null;
     public Bans bans = null;
@@ -55,6 +59,7 @@ public class HardcoreDeathBan extends JavaPlugin {
     private final SimpleDateFormat TimeFormat = new SimpleDateFormat("hh:mm a z");
     private final SimpleDateFormat DateFormat = new SimpleDateFormat("MM/dd/yyyy");
 
+    @Override
     public void onEnable() {
         instance = this;
 
@@ -82,14 +87,21 @@ public class HardcoreDeathBan extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
-        getCommand("deathban").setExecutor(new Deathban(this));
-        getCommand("credits").setExecutor(new Credits(this));
+        commandRegistry = new CommandRegistry(this);
+        commandRegistry.registerCommands(new Deathban());
+        commandRegistry.registerCommands(new Credits());
     }
 
+    @Override
     public void onDisable() {
         credits.save();
         bans.save();
         saveConfig();
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
+        return commandRegistry.handleCommand(sender, command, label, args);
     }
 
     public void log(String message) {

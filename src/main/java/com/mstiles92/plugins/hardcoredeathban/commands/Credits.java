@@ -23,12 +23,11 @@
 
 package com.mstiles92.plugins.hardcoredeathban.commands;
 
+import com.mstiles92.plugins.commonutils.commands.Arguments;
+import com.mstiles92.plugins.commonutils.commands.CommandHandler;
+import com.mstiles92.plugins.commonutils.commands.annotations.Command;
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.ChatColor;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 
 /**
  * Credits is the CommandExecutor that handles all commands dealing
@@ -36,119 +35,85 @@ import org.bukkit.entity.Player;
  *
  * @author mstiles92
  */
-public class Credits implements CommandExecutor {
+public class Credits implements CommandHandler {
     private final HardcoreDeathBan plugin;
     private final String tag = ChatColor.GREEN + "[HardcoreDeathBan] ";
-    private final String perm = ChatColor.DARK_RED + "You do not have permission to perform this command.";
 
     /**
      * The main constructor for this class.
-     *
-     * @param plugin the instance of the plugin
      */
-    public Credits(HardcoreDeathBan plugin) {
-        this.plugin = plugin;
+    public Credits() {
+        this.plugin = HardcoreDeathBan.getInstance();
     }
 
-    @Override
-    public boolean onCommand(CommandSender cs, Command cmd, String label, String[] args) {
-        if (args.length < 1) {
-            if (cs instanceof Player) {
-                if (cs.hasPermission("deathban.credits.check")) {
-                    plugin.log("[" + cs.getName() + "] Player command: /credits");
-                    cs.sendMessage(tag + "Revival credits: " + plugin.credits.getPlayerCredits(cs.getName()));
-                } else {
-                    cs.sendMessage(perm);
-                    plugin.log("Player " + cs.getName() + " denied access to command: /credits");
-                }
+
+    @Command(name = "credits", aliases = {"cr"}, permission = "deathban.credits.check")
+    public void credit(Arguments args) {
+        if (args.getArgs().length < 1) {
+            if (args.isPlayer()) {
+                args.getPlayer().sendMessage(tag + "Revival credits: " + plugin.credits.getPlayerCredits(args.getPlayer().getName()));
             } else {
-                cs.sendMessage(tag + ChatColor.RED + "This command can not be run from the console unless a player is specified.");
+                args.getSender().sendMessage(tag + ChatColor.RED + "This command can not be run from the console unless a player is specified.");
             }
-            return true;
+        } else {
+            if (args.getSender().hasPermission("deathban.credits.check.others")) {
+                args.getSender().sendMessage(tag + args.getArgs()[0] + "'s revival credits: " + plugin.credits.getPlayerCredits(args.getArgs()[0]));
+            } else {
+                args.getSender().sendMessage(ChatColor.RED + "You do not have permission to perform this command.");
+            }
+        }
+    }
+
+    @Command(name = "credits.send", aliases = {"cr.send"}, permission = "deathban.credits.send", playerOnly = true)
+    public void send(Arguments args) {
+        if (args.getArgs().length < 3) {
+            args.getPlayer().sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to send that player.");
+            return;
         }
 
-        if (args[0].equalsIgnoreCase("send")) {
-            if (cs.hasPermission("deathban.credits.send")) {
-                if (args.length < 3) {
-                    cs.sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to send that player.");
-                    return true;
-                }
-
-                if (!(cs instanceof Player)) {
-                    cs.sendMessage(tag + ChatColor.RED + "This command can only be run as a player.");
-                    return true;
-                }
-                plugin.log("[" + cs.getName() + "] Player command: /credits send " + args[1] + args[2]);
-                try {
-                    if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
-                    if (plugin.credits.getPlayerCredits(cs.getName()) >= Integer.parseInt(args[2])) {
-                        plugin.credits.givePlayerCredits(cs.getName(), Integer.parseInt(args[2]) * -1);
-                        plugin.credits.givePlayerCredits(args[1], Integer.parseInt(args[2]));
-                        cs.sendMessage(tag + "You have successfully sent " + args[1] + " " + args[2] + " revival credits.");
-                    } else {
-                        cs.sendMessage(tag + ChatColor.RED + "You do not have enough revival credits.");
-                    }
-                } catch (NumberFormatException e) {
-                    cs.sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
-                }
+        try {
+            if (Integer.parseInt(args.getArgs()[1]) < 1) throw new NumberFormatException();
+            if (plugin.credits.getPlayerCredits(args.getPlayer().getName()) >= Integer.parseInt(args.getArgs()[1])) {
+                plugin.credits.givePlayerCredits(args.getPlayer().getName(), Integer.parseInt(args.getArgs()[1]) * -1);
+                plugin.credits.givePlayerCredits(args.getArgs()[0], Integer.parseInt(args.getArgs()[1]));
+                args.getPlayer().sendMessage(tag + "You have successfully sent " + args.getArgs()[0] + " " + args.getArgs()[1] + " revival credits.");
             } else {
-                cs.sendMessage(perm);
-                plugin.log("Player " + cs.getName() + " denied access to command: /credits send " + args[1] + " " + args[2]);
+                args.getPlayer().sendMessage(tag + ChatColor.RED + "You do not have enough revival credits.");
             }
-            return true;
+        } catch (NumberFormatException e) {
+            args.getPlayer().sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
+        }
+    }
+
+    @Command(name = "credits.give", aliases = {"cr.give"}, permission = "deathban.credits.give")
+    public void give(Arguments args) {
+        if (args.getArgs().length < 2) {
+            args.getSender().sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to give that player.");
+            return;
         }
 
-        if (args[0].equalsIgnoreCase("give")) {
-            if (cs.hasPermission("deathban.credits.give")) {
-                if (args.length < 3) {
-                    cs.sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to give that player.");
-                    return true;
-                }
-                plugin.log("[" + cs.getName() + "] Player command: /credits give " + args[1] + args[2]);
-                try {
-                    if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
-                    plugin.credits.givePlayerCredits(args[1], Integer.parseInt(args[2]));
-                    cs.sendMessage(tag + "You have successfully given " + args[1] + " " + args[2] + " revival credits.");
-                } catch (NumberFormatException e) {
-                    cs.sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
-                }
-            } else {
-                cs.sendMessage(perm);
-            }
-            return true;
+        try {
+            if (Integer.parseInt(args.getArgs()[1]) < 1) throw new NumberFormatException();
+            plugin.credits.givePlayerCredits(args.getArgs()[0], Integer.parseInt(args.getArgs()[1]));
+            args.getSender().sendMessage(tag + "You have successfully given " + args.getArgs()[0] + " " + args.getArgs()[1] + " revival credits.");
+        } catch (NumberFormatException e) {
+            args.getSender().sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
+        }
+    }
+
+    @Command(name = "credits.take", aliases = {"cr.take"}, permission = "deathban.credits.take")
+    public void take(Arguments args) {
+        if (args.getArgs().length < 2) {
+            args.getSender().sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to give that player.");
+            return;
         }
 
-        if (args[0].equalsIgnoreCase("take")) {
-            if (cs.hasPermission("deathban.credits.take")) {
-                if (args.length < 3) {
-                    cs.sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to give that player.");
-                    return true;
-                }
-                plugin.log("[" + cs.getName() + "] Player command: /credits take " + args[1] + args[2]);
-                try {
-                    if (Integer.parseInt(args[2]) < 1) throw new NumberFormatException();
-                    plugin.credits.givePlayerCredits(args[1], Integer.parseInt(args[2]) * -1);
-                    cs.sendMessage(tag + "You have successfully taken " + args[2] + " revival credits from " + args[1] + ".");
-                } catch (NumberFormatException e) {
-                    cs.sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
-                }
-            } else {
-                cs.sendMessage(perm);
-                plugin.log("Player " + cs.getName() + " denied access to command: /credits give " + args[1] + " " + args[2]);
-            }
-            return true;
+        try {
+            if (Integer.parseInt(args.getArgs()[1]) < 1) throw new NumberFormatException();
+            plugin.credits.givePlayerCredits(args.getArgs()[0], Integer.parseInt(args.getArgs()[1]) * -1);
+            args.getSender().sendMessage(tag + "You have successfully taken " + args.getArgs()[1] + " revival credits from " + args.getArgs()[0] + ".");
+        } catch (NumberFormatException e) {
+            args.getSender().sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
         }
-
-        if (args.length == 1) {
-            if (cs.hasPermission("deathban.credits.check.others")) {
-                plugin.log("[" + cs.getName() + "] Player command: /credits " + args[0]);
-                cs.sendMessage(tag + args[0] + "'s revival credits: " + plugin.credits.getPlayerCredits(args[0]));
-            } else {
-                cs.sendMessage(perm);
-                plugin.log("Player " + cs.getName() + " denied access to command: /credits " + args[0]);
-            }
-            return true;
-        }
-        return true;
     }
 }
