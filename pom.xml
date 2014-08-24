@@ -57,6 +57,8 @@
                             <artifactSet>
                                 <includes>
                                     <include>com.mstiles92.plugins:CommonUtils</include>
+                                    <include>org.mcstats.bukkit:metrics</include>
+                                    <include>com.googlecode.json-simple:json-simple</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
