@@ -23,9 +23,9 @@
 
 package com.mstiles92.plugins.hardcoredeathban.commands;
 
-import com.mstiles92.plugins.commonutils.commands.Arguments;
-import com.mstiles92.plugins.commonutils.commands.CommandHandler;
-import com.mstiles92.plugins.commonutils.commands.annotations.Command;
+import com.mstiles92.plugins.stileslib.commands.Arguments;
+import com.mstiles92.plugins.stileslib.commands.CommandHandler;
+import com.mstiles92.plugins.stileslib.commands.annotations.Command;
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;

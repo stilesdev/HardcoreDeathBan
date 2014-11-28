@@ -23,7 +23,6 @@
 
 package com.mstiles92.plugins.hardcoredeathban.listeners;
 
-import com.mstiles92.plugins.commonutils.updates.UpdateChecker;
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;

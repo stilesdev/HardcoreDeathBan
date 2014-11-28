@@ -23,9 +23,9 @@
 
 package com.mstiles92.plugins.hardcoredeathban;
 
-import com.mstiles92.plugins.commonutils.calendar.CalendarUtils;
-import com.mstiles92.plugins.commonutils.commands.CommandRegistry;
-import com.mstiles92.plugins.commonutils.updates.UpdateChecker;
+import com.mstiles92.plugins.stileslib.calendar.CalendarUtils;
+import com.mstiles92.plugins.stileslib.commands.CommandRegistry;
+import com.mstiles92.plugins.stileslib.updates.UpdateChecker;
 import com.mstiles92.plugins.hardcoredeathban.commands.Credits;
 import com.mstiles92.plugins.hardcoredeathban.commands.Deathban;
 import com.mstiles92.plugins.hardcoredeathban.listeners.PlayerListener;
@@ -74,8 +74,8 @@ public class HardcoreDeathBan extends JavaPlugin {
         }
 
         if (getConfig().getBoolean("Check-for-Updates")) {
-            updateChecker = new UpdateChecker("hardcoredeathban", getLogger(), getDescription().getVersion());
-            getServer().getScheduler().runTaskTimer(this, updateChecker, 40, 216000);
+            updateChecker = new UpdateChecker(this, 42801, "hardcoredeathban", 216000);
+            updateChecker.start();
         }
 
         try {

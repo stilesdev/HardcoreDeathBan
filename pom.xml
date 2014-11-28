@@ -56,7 +56,7 @@
                             <createDependencyReducedPom>false</createDependencyReducedPom>
                             <artifactSet>
                                 <includes>
-                                    <include>com.mstiles92.plugins:CommonUtils</include>
+                                    <include>com.mstiles92.plugins:StilesLib</include>
                                     <include>org.mcstats.bukkit:metrics</include>
                                     <include>com.googlecode.json-simple:json-simple</include>
                                 </includes>
@@ -79,7 +79,7 @@
         </repository>
         <repository>
         	<id>mstiles92-repo</id>
-        	<url>http://repo.mstiles92.com/artifactory/bukkit-public</url>
+        	<url>https://mstiles92.com/artifactory/mstiles92-plugins</url>
         </repository>
     </repositories>
 
@@ -132,8 +132,8 @@
 
         <dependency>
             <groupId>com.mstiles92.plugins</groupId>
-            <artifactId>CommonUtils</artifactId>
-            <version>1.0.4</version>
+            <artifactId>StilesLib</artifactId>
+            <version>1.0.6-SNAPSHOT</version>
         </dependency>
     </dependencies>
 </project>

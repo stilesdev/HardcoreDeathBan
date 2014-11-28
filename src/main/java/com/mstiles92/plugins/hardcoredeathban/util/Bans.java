@@ -23,7 +23,7 @@
 
 package com.mstiles92.plugins.hardcoredeathban.util;
 
-import com.mstiles92.plugins.commonutils.calendar.CalendarUtils;
+import com.mstiles92.plugins.stileslib.calendar.CalendarUtils;
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import com.mstiles92.plugins.hardcoredeathban.tasks.KickRunnable;
 import org.bukkit.ChatColor;
