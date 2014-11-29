@@ -10,6 +10,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <bukkitVersion>1.7.9-R0.2</bukkitVersion>
     </properties>
 
     <build>
@@ -58,7 +59,7 @@
                                 <includes>
                                     <include>com.mstiles92.plugins:StilesLib</include>
                                     <include>org.mcstats.bukkit:metrics</include>
-                                    <include>com.googlecode.json-simple:json-simple</include>
+                                    <include>org.glassfish:javax.json</include>
                                 </includes>
                             </artifactSet>
                         </configuration>
@@ -87,13 +88,13 @@
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
-            <version>1.7.9-R0.2</version>
+            <version>${bukkitVersion}</version>
         </dependency>
 
         <dependency>
             <groupId>org.bukkit</groupId>
             <artifactId>craftbukkit</artifactId>
-            <version>1.7.9-R0.2</version>
+            <version>${bukkitVersion}</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -104,9 +105,9 @@
         </dependency>
 
         <dependency>
-            <groupId>com.googlecode.json-simple</groupId>
-            <artifactId>json-simple</artifactId>
-            <version>1.1.1</version>
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.4</version>
         </dependency>
 
         <dependency>
