@@ -24,6 +24,7 @@
 package com.mstiles92.plugins.hardcoredeathban.listeners;
 
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.util.Log;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -53,7 +54,7 @@ public class PlayerListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent e) {
         if (HardcoreDeathBan.getConfigObject().isEnabled() && !(e.getEntity().hasPermission("deathban.ban.exempt"))) {
-            plugin.log("Player death: " + e.getEntity().getName());
+            Log.verbose("Player death: " + e.getEntity().getName());
             plugin.bans.banPlayer(e.getEntity().getName());
         }
     }
@@ -63,20 +64,18 @@ public class PlayerListener implements Listener {
         if (HardcoreDeathBan.getConfigObject().isEnabled()) {
             if (plugin.bans.checkPlayerIsBanned(e.getName())) {
                 if (plugin.credits.getPlayerCredits(e.getName()) < 1) {
-                    plugin.log("Banned player denied login: " + e.getName());
+                    Log.verbose("Banned player denied login: " + e.getName());
                     String s = HardcoreDeathBan.getConfigObject().getEarlyMessage();
                     e.disallow(Result.KICK_BANNED, plugin.replaceVariables(s, e.getName()));
                 } else {
-                    plugin.log("Banned player redeemed 1 revival credit upon login: " + e.getName());
+                    Log.verbose("Banned player redeemed 1 revival credit upon login: " + e.getName());
                     plugin.credits.givePlayerCredits(e.getName(), -1);
                     plugin.bans.unbanPlayer(e.getName());
                     e.allow();
                 }
             } else if (!plugin.credits.checkPlayerHasPlayedBefore(e.getName())) {
                 int startingCredits = HardcoreDeathBan.getConfigObject().getStartingCredits();
-                plugin.log("New player recieved " +
-                        Integer.toString(startingCredits) +
-                        " revival credits upon their first login: " + e.getName());    //TODO: remove give of credits on first join
+                Log.verbose("New player recieved " + startingCredits + " revival credits upon their first login: " + e.getName());
                 plugin.credits.givePlayerCredits(e.getName(), startingCredits);
                 e.allow();
             } else {

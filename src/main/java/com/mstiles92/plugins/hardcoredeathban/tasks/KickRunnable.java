@@ -24,6 +24,7 @@
 package com.mstiles92.plugins.hardcoredeathban.tasks;
 
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.util.Log;
 import org.bukkit.entity.Player;
 
 import java.util.Calendar;
@@ -63,12 +64,12 @@ public class KickRunnable implements Runnable {
                     }
                 }
                 p.kickPlayer(plugin.replaceVariables(kickMessage, p.getName()));
-                plugin.log("[KickRunnable] Player " + playerName + " kicked.");
+                Log.verbose("[KickRunnable] Player " + playerName + " kicked.");
             } else {
-                plugin.log("[KickRunnable] Player " + playerName + " is offline.");
+                Log.verbose("[KickRunnable] Player " + playerName + " is offline.");
             }
         } else {
-            plugin.log("[KickRunnable] Failed to store ban for " + playerName);
+            Log.verbose("[KickRunnable] Failed to store ban for " + playerName);
         }
     }
 }

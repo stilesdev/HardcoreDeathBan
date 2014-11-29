@@ -71,7 +71,7 @@ public class RevivalCredits {
         try {
             config.save(file);
         } catch (IOException e) {
-            plugin.getLogger().warning(ChatColor.RED + "Error occurred while saving credits config file.");
+            Log.warning(ChatColor.RED + "Error occurred while saving credits config file.");
         }
     }
 

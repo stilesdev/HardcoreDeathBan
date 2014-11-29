@@ -62,10 +62,10 @@ public class Bans {
 
         this.deathClasses = HardcoreDeathBan.getConfigObject().getDeathClasses();
         if (this.deathClasses.size() == 0) {
-            plugin.log("No death classes found.");
+            Log.verbose("No death classes found.");
         } else {
             for (String s : this.deathClasses) {
-                plugin.log("Death class loaded: " + s);
+                Log.verbose("Death class loaded: " + s);
             }
         }
     }
@@ -87,7 +87,7 @@ public class Bans {
         try {
             config.save(file);
         } catch (IOException e) {
-            plugin.getLogger().warning(ChatColor.RED + "Error occurred while saving bans config file.");
+            Log.warning(ChatColor.RED + "Error occurred while saving bans config file.");
         }
     }
 
@@ -135,7 +135,7 @@ public class Bans {
      * @param player name of the player to be unbanned
      */
     public void unbanPlayer(String player) {
-        plugin.log("Player unbanned: " + player);
+        Log.verbose("Player unbanned: " + player);
         config.set(player.toLowerCase(), null);
     }
 
@@ -152,12 +152,13 @@ public class Bans {
                 perm.setDefault(PermissionDefault.FALSE);
                 if (p.hasPermission(perm)) {
                     banPlayer(player, HardcoreDeathBan.getConfigObject().getDeathClassBanTime(s));
-                    plugin.log("Death class " + s + " detected for " + player);
+                    Log.verbose("Death class " + s + " detected for " + player);
                     return;
                 }
             }
         }
-        plugin.log("No death class detected for " + player);
+
+        Log.verbose("No death class detected for " + player);
         banPlayer(player, HardcoreDeathBan.getConfigObject().getBanTime());
     }
 
@@ -176,16 +177,16 @@ public class Bans {
                 if (!p.hasPermission("deathban.ban.exempt")) {
                     config.set(player.toLowerCase(), unbanDate.getTimeInMillis());
                     save();
-                    plugin.log("Player added to ban list: " + player);
+                    Log.verbose("Player added to ban list: " + player);
                     plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new KickRunnable(plugin, player), HardcoreDeathBan.getConfigObject().getTickDelay());
                 }
             } else {                    // Player is offline
                 config.set(player.toLowerCase(), unbanDate.getTimeInMillis());
                 save();
-                plugin.log("Offline player added to ban list: " + player);
+                Log.verbose("Offline player added to ban list: " + player);
             }
         } catch (Exception e) {
-            plugin.log("Error occurred while banning player: " + player);
+            Log.verbose("Error occurred while banning player: " + player);
         }
     }
 }

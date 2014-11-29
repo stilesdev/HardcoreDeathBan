@@ -24,6 +24,7 @@
 package com.mstiles92.plugins.hardcoredeathban;
 
 import com.mstiles92.plugins.hardcoredeathban.config.Config;
+import com.mstiles92.plugins.hardcoredeathban.util.Log;
 import com.mstiles92.plugins.stileslib.calendar.CalendarUtils;
 import com.mstiles92.plugins.stileslib.commands.CommandRegistry;
 import com.mstiles92.plugins.stileslib.updates.UpdateChecker;
@@ -72,7 +73,7 @@ public class HardcoreDeathBan extends JavaPlugin {
             credits = new RevivalCredits(this, "credits.yml");
             bans = new Bans(this, "bans.yml");
         } catch (Exception e) {
-            getLogger().warning(ChatColor.RED + "Error opening a config file. Plugin will now be disabled.");
+            Log.warning(ChatColor.RED + "Error opening a config file. Plugin will now be disabled.");
             getPluginLoader().disablePlugin(this);
         }
 
@@ -85,7 +86,7 @@ public class HardcoreDeathBan extends JavaPlugin {
             Metrics metrics = new Metrics(this);
             metrics.start();
         } catch (IOException e) {
-            getLogger().warning(ChatColor.RED + "Error starting metrics!");
+            Log.warning(ChatColor.RED + "Error starting metrics!");
         }
 
         getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
@@ -105,12 +106,6 @@ public class HardcoreDeathBan extends JavaPlugin {
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
         return commandRegistry.handleCommand(sender, command, label, args);
-    }
-
-    public void log(String message) {
-        if (config.shouldLogVerbose()) {
-            getLogger().info(message);
-        }
     }
 
     public String replaceVariables(String msg, String name) {
