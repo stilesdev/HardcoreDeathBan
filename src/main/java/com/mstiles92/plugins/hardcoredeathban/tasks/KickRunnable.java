@@ -54,11 +54,11 @@ public class KickRunnable implements Runnable {
         Calendar unbanDate = plugin.bans.getUnbanCalendar(playerName);
         if (unbanDate != null) {
             Player p = plugin.getServer().getPlayerExact(playerName);
-            String kickMessage = plugin.getConfig().getString("Death-Message");
+            String kickMessage = HardcoreDeathBan.getConfigObject().getDeathMessage();
             if (p != null) {
-                for (String s : plugin.bans.deathClasses) {
+                for (String s : HardcoreDeathBan.getConfigObject().getDeathClasses()) {
                     if (p.hasPermission("deathban.class." + s)) {
-                        kickMessage = plugin.getConfig().getString("Death-Classes." + s + ".Death-Message");
+                        kickMessage = HardcoreDeathBan.getConfigObject().getDeathClassDeathMessage(s);
                         break;
                     }
                 }

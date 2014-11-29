@@ -97,7 +97,7 @@ public class RevivalCredits {
      */
     public void givePlayerCredits(String player, int amount) {
         if (!config.contains(player.toLowerCase())) {
-            config.set(player.toLowerCase(), plugin.getConfig().getInt("Starting-Credits"));
+            config.set(player.toLowerCase(), HardcoreDeathBan.getConfigObject().getStartingCredits());
         }
         config.set(player.toLowerCase(), amount + config.getInt(player.toLowerCase()));
         save();
@@ -129,7 +129,7 @@ public class RevivalCredits {
      * Reset all players' credits to the amount recieved when starting out.
      */
     public void resetAllPlayersCredits() {
-        final int startingAmount = plugin.getConfig().getInt("Starting-Credits");
+        final int startingAmount = HardcoreDeathBan.getConfigObject().getStartingCredits();
         for (String player : config.getKeys(false)) {
             setPlayerCredits(player, startingAmount);
         }

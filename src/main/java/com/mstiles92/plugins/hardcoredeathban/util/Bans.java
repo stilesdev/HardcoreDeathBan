@@ -60,7 +60,7 @@ public class Bans {
         this.plugin = plugin;
         load(filename);
 
-        this.deathClasses = plugin.getConfig().getConfigurationSection("Death-Classes").getKeys(false);
+        this.deathClasses = HardcoreDeathBan.getConfigObject().getDeathClasses();
         if (this.deathClasses.size() == 0) {
             plugin.log("No death classes found.");
         } else {
@@ -151,14 +151,14 @@ public class Bans {
                 Permission perm = new Permission("deathban.class." + s);
                 perm.setDefault(PermissionDefault.FALSE);
                 if (p.hasPermission(perm)) {
-                    banPlayer(player, plugin.getConfig().getString("Death-Classes." + s + ".Ban-Time"));
+                    banPlayer(player, HardcoreDeathBan.getConfigObject().getDeathClassBanTime(s));
                     plugin.log("Death class " + s + " detected for " + player);
                     return;
                 }
             }
         }
         plugin.log("No death class detected for " + player);
-        banPlayer(player, plugin.getConfig().getString("Ban-Time"));
+        banPlayer(player, HardcoreDeathBan.getConfigObject().getBanTime());
     }
 
     /**
@@ -177,7 +177,7 @@ public class Bans {
                     config.set(player.toLowerCase(), unbanDate.getTimeInMillis());
                     save();
                     plugin.log("Player added to ban list: " + player);
-                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new KickRunnable(plugin, player), plugin.getConfig().getInt("Tick-Delay"));
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new KickRunnable(plugin, player), HardcoreDeathBan.getConfigObject().getTickDelay());
                 }
             } else {                    // Player is offline
                 config.set(player.toLowerCase(), unbanDate.getTimeInMillis());

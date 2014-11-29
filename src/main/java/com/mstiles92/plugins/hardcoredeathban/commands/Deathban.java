@@ -66,21 +66,19 @@ public class Deathban implements CommandHandler {
 
     @Command(name = "deathban.enable", aliases = {"db.enable", "hdb.enable"}, permission = "deathban.enable")
     public void enable(Arguments args) {
-        plugin.getConfig().set("Enabled", true);
-        plugin.saveConfig();
+        HardcoreDeathBan.getConfigObject().setEnabled(true);
         args.getSender().sendMessage(tag + "Enabled!");
 
         for (Player p : plugin.getServer().getOnlinePlayers()) {
             if (plugin.bans.checkPlayerIsBanned(p.getName())) {
-                p.kickPlayer(plugin.replaceVariables(plugin.getConfig().getString("Banned-Message"), p.getName()));
+                p.kickPlayer(plugin.replaceVariables(HardcoreDeathBan.getConfigObject().getEarlyMessage(), p.getName()));
             }
         }
     }
 
     @Command(name = "deathban.disable", aliases = {"db.disable", "hdb.disable"}, permission = "deathban.enable")
     public void disable(Arguments args) {
-        plugin.getConfig().set("Enabled", false);
-        plugin.saveConfig();
+        HardcoreDeathBan.getConfigObject().setEnabled(false);
         args.getSender().sendMessage(tag + "Disabled!");
     }
 

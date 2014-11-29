@@ -23,6 +23,7 @@
 
 package com.mstiles92.plugins.hardcoredeathban;
 
+import com.mstiles92.plugins.hardcoredeathban.config.Config;
 import com.mstiles92.plugins.stileslib.calendar.CalendarUtils;
 import com.mstiles92.plugins.stileslib.commands.CommandRegistry;
 import com.mstiles92.plugins.stileslib.updates.UpdateChecker;
@@ -50,6 +51,7 @@ import java.util.Calendar;
  */
 public class HardcoreDeathBan extends JavaPlugin {
     private static HardcoreDeathBan instance;
+    private static Config config;
     private UpdateChecker updateChecker;
     private CommandRegistry commandRegistry;
 
@@ -62,6 +64,7 @@ public class HardcoreDeathBan extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+        config = new Config();
 
         saveDefaultConfig();
 
@@ -73,7 +76,7 @@ public class HardcoreDeathBan extends JavaPlugin {
             getPluginLoader().disablePlugin(this);
         }
 
-        if (getConfig().getBoolean("Check-for-Updates")) {
+        if (config.shouldCheckForUpdates()) {
             updateChecker = new UpdateChecker(this, 42801, "hardcoredeathban", 216000);
             updateChecker.start();
         }
@@ -105,7 +108,7 @@ public class HardcoreDeathBan extends JavaPlugin {
     }
 
     public void log(String message) {
-        if (getConfig().getBoolean("Verbose")) {
+        if (config.shouldLogVerbose()) {
             getLogger().info(message);
         }
     }
@@ -132,6 +135,10 @@ public class HardcoreDeathBan extends JavaPlugin {
 
     public UpdateChecker getUpdateChecker() {
         return updateChecker;
+    }
+
+    public static Config getConfigObject() {
+        return config;
     }
 
     public static HardcoreDeathBan getInstance() {

@@ -52,7 +52,7 @@ public class PlayerListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerDeath(PlayerDeathEvent e) {
-        if (plugin.getConfig().getBoolean("Enabled") && !(e.getEntity().hasPermission("deathban.ban.exempt"))) {
+        if (HardcoreDeathBan.getConfigObject().isEnabled() && !(e.getEntity().hasPermission("deathban.ban.exempt"))) {
             plugin.log("Player death: " + e.getEntity().getName());
             plugin.bans.banPlayer(e.getEntity().getName());
         }
@@ -60,11 +60,11 @@ public class PlayerListener implements Listener {
 
     @EventHandler(ignoreCancelled = true)
     public void onPlayerLogin(AsyncPlayerPreLoginEvent e) {
-        if (plugin.getConfig().getBoolean("Enabled")) {
+        if (HardcoreDeathBan.getConfigObject().isEnabled()) {
             if (plugin.bans.checkPlayerIsBanned(e.getName())) {
                 if (plugin.credits.getPlayerCredits(e.getName()) < 1) {
                     plugin.log("Banned player denied login: " + e.getName());
-                    String s = plugin.getConfig().getString("Early-Message");
+                    String s = HardcoreDeathBan.getConfigObject().getEarlyMessage();
                     e.disallow(Result.KICK_BANNED, plugin.replaceVariables(s, e.getName()));
                 } else {
                     plugin.log("Banned player redeemed 1 revival credit upon login: " + e.getName());
@@ -73,7 +73,7 @@ public class PlayerListener implements Listener {
                     e.allow();
                 }
             } else if (!plugin.credits.checkPlayerHasPlayedBefore(e.getName())) {
-                int startingCredits = plugin.getConfig().getInt("Starting-Credits");
+                int startingCredits = HardcoreDeathBan.getConfigObject().getStartingCredits();
                 plugin.log("New player recieved " +
                         Integer.toString(startingCredits) +
                         " revival credits upon their first login: " + e.getName());    //TODO: remove give of credits on first join
