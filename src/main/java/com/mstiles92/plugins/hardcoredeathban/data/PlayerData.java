@@ -33,9 +33,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 public class PlayerData {
     private static File file;
@@ -146,11 +144,33 @@ public class PlayerData {
         return lastSeenName;
     }
 
+    public void setLastSeenName(String lastSeenName) {
+        this.lastSeenName = lastSeenName;
+    }
+
     public long getUnbanTimeInMillis() {
         return unbanTimeInMillis;
     }
 
+    public void setUnbanTimeInMillis(long unbanTimeInMillis) {
+        this.unbanTimeInMillis = unbanTimeInMillis;
+    }
+
+    public Calendar getUnbanTimeCalendar() {
+        if (unbanTimeInMillis < 0) {
+            return null;
+        }
+
+        Calendar calendar = new GregorianCalendar();
+        calendar.setTimeInMillis(unbanTimeInMillis);
+        return calendar;
+    }
+
     public int getRevivalCredits() {
         return revivalCredits;
+    }
+
+    public void setRevivalCredits(int revivalCredits) {
+        this.revivalCredits = revivalCredits;
     }
 }

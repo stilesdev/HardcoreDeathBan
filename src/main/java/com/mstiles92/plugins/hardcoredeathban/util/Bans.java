@@ -174,7 +174,7 @@ public class Bans {
                     config.set(player.toLowerCase(), unbanDate.getTimeInMillis());
                     save();
                     Log.verbose("Player added to ban list: " + player);
-                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new KickRunnable(plugin, player), HardcoreDeathBan.getConfigObject().getTickDelay());
+                    plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new KickRunnable(p.getUniqueId()), HardcoreDeathBan.getConfigObject().getTickDelay());
                 }
             } else {                    // Player is offline
                 config.set(player.toLowerCase(), unbanDate.getTimeInMillis());

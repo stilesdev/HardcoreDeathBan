@@ -26,51 +26,32 @@ package com.mstiles92.plugins.hardcoredeathban.tasks;
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
 import com.mstiles92.plugins.hardcoredeathban.util.Log;
+import com.mstiles92.plugins.hardcoredeathban.util.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.Calendar;
+import java.util.UUID;
 
 /**
- * KickRunnable is a class that implements the Runnable interface, used to
- * kick the player after a short delay when getting banned after death.
- *
- * @author mstiles92
+ * KickRunnable is a BukkitRunnable used to kick a Player after a short delay when getting banned after death.
  */
-public class KickRunnable implements Runnable {
-    private final HardcoreDeathBan plugin;
-    private final String playerName;
+public class KickRunnable extends BukkitRunnable {
+    private UUID playerUUID;
 
-    /**
-     * The main constructor for this class.
-     *
-     * @param plugin     the instance of the plugin
-     * @param playerName the name of the player to kick
-     */
-    public KickRunnable(HardcoreDeathBan plugin, String playerName) {
-        this.plugin = plugin;
-        this.playerName = playerName;
+    public KickRunnable(UUID playerUUID) {
+        this.playerUUID = playerUUID;
     }
 
     @Override
     public void run() {
-        Calendar unbanDate = plugin.bans.getUnbanCalendar(playerName);
-        if (unbanDate != null) {
-            Player p = plugin.getServer().getPlayerExact(playerName);
-            String kickMessage = HardcoreDeathBan.getConfigObject().getDeathMessage();
-            if (p != null) {
-                for (DeathClass deathClass : HardcoreDeathBan.getConfigObject().getDeathClasses()) {
-                    if (p.hasPermission(deathClass.getPermission())) {
-                        kickMessage = deathClass.getDeathMessage();
-                        break;
-                    }
-                }
-                p.kickPlayer(plugin.replaceVariables(kickMessage, p.getName()));
-                Log.verbose("[KickRunnable] Player " + playerName + " kicked.");
-            } else {
-                Log.verbose("[KickRunnable] Player " + playerName + " is offline.");
-            }
-        } else {
-            Log.verbose("[KickRunnable] Failed to store ban for " + playerName);
+        Player player = Bukkit.getPlayer(playerUUID);
+        if (player != null) {
+            DeathClass deathClass = Utils.getDeathClass(player);
+            String kickMessage = (deathClass == null) ? HardcoreDeathBan.getConfigObject().getDeathMessage() : deathClass.getDeathMessage();
+            player.kickPlayer(Utils.replaceMessageVariables(kickMessage, player));
+            Log.verbose("Player " + player.getName() + " kicked successfully.");
         }
+
     }
 }
