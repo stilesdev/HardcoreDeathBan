@@ -26,21 +26,91 @@ package com.mstiles92.plugins.hardcoredeathban.data;
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.entity.Player;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonObjectBuilder;
-import javax.json.JsonValue;
+import javax.json.*;
+import javax.json.stream.JsonGenerator;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
 public class PlayerData {
+    private static File file;
     private static Map<UUID, PlayerData> instances = new HashMap<>();
 
     private String lastSeenName;
     private long unbanTimeInMillis;
     private int revivalCredits;
+
+
+
+    private static PlayerData create(Player player) {
+        PlayerData data = new PlayerData(player);
+        instances.put(player.getUniqueId(), data);
+        return data;
+    }
+
+    public static void init(File jsonFile) {
+        file = jsonFile;
+        try {
+            if (file.exists()) {
+                if (file.length() > 0) {
+                    load();
+                }
+            } else {
+                if (!file.createNewFile()) {
+                    throw new IOException("Unable to create the new JSON file.");
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void load() {
+        try {
+            JsonReader reader = Json.createReader(new FileInputStream(file));
+            JsonObject jsonRoot = reader.readObject();
+            reader.close();
+
+            deserialize(jsonRoot);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public static void save() {
+        try {
+            Map<String, Object> config = new HashMap<>();
+            config.put(JsonGenerator.PRETTY_PRINTING, true);
+
+            JsonObject serialized = serialize();
+            JsonWriter writer = Json.createWriterFactory(config).createWriter(new FileOutputStream(file));
+            writer.write(serialized);
+            writer.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static void deserialize(JsonObject json) {
+        instances.clear();
+
+        for (Map.Entry<String, JsonValue> entry : json.entrySet()) {
+            instances.put(UUID.fromString(entry.getKey()), new PlayerData((JsonObject) entry.getValue()));
+        }
+    }
+
+    private static JsonObject serialize() {
+        JsonObjectBuilder builder = Json.createObjectBuilder();
+        for (Map.Entry<UUID, PlayerData> entry : instances.entrySet()) {
+            builder.add(entry.getKey().toString(), entry.getValue().toJsonObject());
+        }
+        return builder.build();
+    }
 
     private PlayerData(JsonObject json) {
         lastSeenName = json.getString("lastSeenName");
@@ -59,28 +129,6 @@ public class PlayerData {
         builder.add("lastSeenName", lastSeenName);
         builder.add("unbanTimeInMillis", new BigDecimal(unbanTimeInMillis));
         builder.add("revivalCredits", revivalCredits);
-        return builder.build();
-    }
-
-    private static PlayerData create(Player player) {
-        PlayerData data = new PlayerData(player);
-        instances.put(player.getUniqueId(), data);
-        return data;
-    }
-
-    public static void deserialize(JsonObject json) {
-        instances.clear();
-
-        for (Map.Entry<String, JsonValue> entry : json.entrySet()) {
-            instances.put(UUID.fromString(entry.getKey()), new PlayerData((JsonObject) entry.getValue()));
-        }
-    }
-
-    public static JsonObject serialize() {
-        JsonObjectBuilder builder = Json.createObjectBuilder();
-        for (Map.Entry<UUID, PlayerData> entry : instances.entrySet()) {
-            builder.add(entry.getKey().toString(), entry.getValue().toJsonObject());
-        }
         return builder.build();
     }
 
