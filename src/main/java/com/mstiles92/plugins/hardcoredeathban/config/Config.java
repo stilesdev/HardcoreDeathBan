@@ -24,8 +24,10 @@
 package com.mstiles92.plugins.hardcoredeathban.config;
 
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class Config {
@@ -74,7 +76,8 @@ public class Config {
     }
 
     public Set<String> getDeathClasses() {
-        return config.getConfigurationSection("Classes").getKeys(false);
+        ConfigurationSection section = config.getConfigurationSection("Classes");
+        return (section == null) ? new HashSet<String>() : section.getKeys(false);
     }
 
     public String getDeathClassBanTime(String deathClass) {
