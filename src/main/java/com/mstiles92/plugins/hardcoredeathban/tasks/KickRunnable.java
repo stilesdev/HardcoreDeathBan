@@ -24,6 +24,7 @@
 package com.mstiles92.plugins.hardcoredeathban.tasks;
 
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
 import com.mstiles92.plugins.hardcoredeathban.util.Log;
 import org.bukkit.entity.Player;
 
@@ -57,9 +58,9 @@ public class KickRunnable implements Runnable {
             Player p = plugin.getServer().getPlayerExact(playerName);
             String kickMessage = HardcoreDeathBan.getConfigObject().getDeathMessage();
             if (p != null) {
-                for (String s : HardcoreDeathBan.getConfigObject().getDeathClasses()) {
-                    if (p.hasPermission("deathban.class." + s)) {
-                        kickMessage = HardcoreDeathBan.getConfigObject().getDeathClassDeathMessage(s);
+                for (DeathClass deathClass : HardcoreDeathBan.getConfigObject().getDeathClasses()) {
+                    if (p.hasPermission(deathClass.getPermission())) {
+                        kickMessage = deathClass.getDeathMessage();
                         break;
                     }
                 }

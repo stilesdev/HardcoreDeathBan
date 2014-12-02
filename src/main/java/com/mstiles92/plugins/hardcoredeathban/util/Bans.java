@@ -23,6 +23,7 @@
 
 package com.mstiles92.plugins.hardcoredeathban.util;
 
+import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
 import com.mstiles92.plugins.stileslib.calendar.CalendarUtils;
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import com.mstiles92.plugins.hardcoredeathban.tasks.KickRunnable;
@@ -43,8 +44,6 @@ import java.util.Set;
  * @author mstiles92
  */
 public class Bans {
-    public Set<String> deathClasses;
-
     private final HardcoreDeathBan plugin;
     private YamlConfiguration config;
     private File file;
@@ -60,12 +59,11 @@ public class Bans {
         this.plugin = plugin;
         load(filename);
 
-        this.deathClasses = HardcoreDeathBan.getConfigObject().getDeathClasses();
-        if (this.deathClasses.size() == 0) {
+        if (HardcoreDeathBan.getConfigObject().getDeathClasses().size() == 0) {
             Log.verbose("No death classes found.");
         } else {
-            for (String s : this.deathClasses) {
-                Log.verbose("Death class loaded: " + s);
+            for (DeathClass deathClass : HardcoreDeathBan.getConfigObject().getDeathClasses()) {
+                Log.verbose("Death class loaded: " + deathClass.getName());
             }
         }
     }
@@ -147,12 +145,10 @@ public class Bans {
     public void banPlayer(String player) {
         final Player p = plugin.getServer().getPlayerExact(player);
         if (p != null) {
-            for (String s : this.deathClasses) {
-                Permission perm = new Permission("deathban.class." + s);
-                perm.setDefault(PermissionDefault.FALSE);
-                if (p.hasPermission(perm)) {
-                    banPlayer(player, HardcoreDeathBan.getConfigObject().getDeathClassBanTime(s));
-                    Log.verbose("Death class " + s + " detected for " + player);
+            for (DeathClass deathClass : HardcoreDeathBan.getConfigObject().getDeathClasses()) {
+                if (p.hasPermission(deathClass.getPermission())) {
+                    banPlayer(player, deathClass.getBanTime());
+                    Log.verbose("Death class " + deathClass.getName() + " detected for " + player);
                     return;
                 }
             }

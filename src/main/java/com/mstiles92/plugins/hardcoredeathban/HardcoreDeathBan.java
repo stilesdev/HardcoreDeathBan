@@ -100,7 +100,7 @@ public class HardcoreDeathBan extends JavaPlugin {
     public void onDisable() {
         credits.save();
         bans.save();
-        saveConfig();
+        config.save();
     }
 
     @Override
