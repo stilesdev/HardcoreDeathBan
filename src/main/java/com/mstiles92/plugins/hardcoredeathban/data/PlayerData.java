@@ -184,7 +184,11 @@ public class PlayerData {
         return revivalCredits;
     }
 
-    public void setRevivalCredits(int revivalCredits) {
-        this.revivalCredits = revivalCredits;
+    public void setRevivalCredits(int amount) {
+        revivalCredits = amount;
+    }
+
+    public void addRevivalCredits(int amount) {
+        revivalCredits += amount;
     }
 }
