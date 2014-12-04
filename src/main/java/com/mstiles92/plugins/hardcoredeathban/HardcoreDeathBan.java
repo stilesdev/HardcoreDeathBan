@@ -74,7 +74,7 @@ public class HardcoreDeathBan extends JavaPlugin {
         commandRegistry.registerCommands(new Deathban());
         commandRegistry.registerCommands(new Credits());
 
-        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerListener(), this);
 
         if (config.shouldCheckForUpdates()) {
             updateChecker = new UpdateChecker(this, 42801, "hardcoredeathban", 216000);
