@@ -49,7 +49,7 @@ public class KickRunnable extends BukkitRunnable {
         if (player != null) {
             DeathClass deathClass = Utils.getDeathClass(player);
             String kickMessage = (deathClass == null) ? HardcoreDeathBan.getConfigObject().getDeathMessage() : deathClass.getDeathMessage();
-            player.kickPlayer(Utils.replaceMessageVariables(kickMessage, player));
+            player.kickPlayer(Utils.replaceMessageVariables(kickMessage, player.getUniqueId()));
             Log.verbose("Player " + player.getName() + " kicked successfully.");
         }
 

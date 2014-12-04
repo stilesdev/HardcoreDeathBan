@@ -23,6 +23,7 @@
 
 package com.mstiles92.plugins.hardcoredeathban.commands;
 
+import com.mstiles92.plugins.hardcoredeathban.util.Utils;
 import com.mstiles92.plugins.stileslib.commands.Arguments;
 import com.mstiles92.plugins.stileslib.commands.CommandHandler;
 import com.mstiles92.plugins.stileslib.commands.annotations.Command;
@@ -71,7 +72,7 @@ public class Deathban implements CommandHandler {
 
         for (Player p : plugin.getServer().getOnlinePlayers()) {
             if (plugin.bans.checkPlayerIsBanned(p.getName())) {
-                p.kickPlayer(plugin.replaceVariables(HardcoreDeathBan.getConfigObject().getEarlyMessage(), p.getName()));
+                p.kickPlayer(Utils.replaceMessageVariables(HardcoreDeathBan.getConfigObject().getEarlyMessage(), p.getUniqueId()));
             }
         }
     }
@@ -102,7 +103,9 @@ public class Deathban implements CommandHandler {
             plugin.bans.banPlayer(args.getArgs()[0], args.getArgs()[1]);
         }
 
-        args.getSender().sendMessage(tag + plugin.replaceVariables("%player% is now banned until %unbantime% %unbandate%", args.getArgs()[0]));
+        if (player != null) {
+            args.getSender().sendMessage(tag + Utils.replaceMessageVariables("%player% is now banned until %unbantime% %unbandate%", player.getUniqueId()));
+        }
     }
 
     @Command(name = "deathban.unban", aliases = {"db.unban", "hdb.unban"}, permission = "deathban.unban")
@@ -128,7 +131,11 @@ public class Deathban implements CommandHandler {
         }
 
         if (plugin.bans.checkPlayerIsBanned(args.getArgs()[0])) {
-            args.getSender().sendMessage(tag + plugin.replaceVariables("%player% is banned until %unbantime% %unbandate%", args.getArgs()[0]));
+            Player player = Bukkit.getPlayer(args.getArgs()[0]);
+
+            if (player != null) {
+                args.getSender().sendMessage(tag + Utils.replaceMessageVariables("%player% is banned until %unbantime% %unbandate%", player.getUniqueId()));
+            }
         } else {
             args.getSender().sendMessage(tag + args.getArgs()[0] + " is not currently banned.");
         }
