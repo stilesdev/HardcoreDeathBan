@@ -115,6 +115,14 @@ public class Utils {
         PlayerData.get(player).setUnbanTimeInMillis(-1);
     }
 
+    public static void unbanPlayer(UUID playerUUID) {
+        PlayerData playerData = PlayerData.get(playerUUID);
+
+        if (playerData != null) {
+            playerData.setUnbanTimeInMillis(-1);
+        }
+    }
+
     /**
      * Get the death class for the Player specified by UUID.
      *
@@ -147,18 +155,22 @@ public class Utils {
     /**
      * Check if the specified Player is currently banned.
      *
-     * @param player the Player whose ban status should be checked
+     * @param playerUUID the UUID of the Player whose ban status should be checked
      * @return true if the Player is banned, false if they are not
      */
-    public static boolean checkPlayerBanned(Player player) {
-        Calendar unbanTime = PlayerData.get(player).getUnbanTimeCalendar();
-        Calendar now = new GregorianCalendar();
+    public static boolean checkPlayerBanned(UUID playerUUID) {
+        PlayerData playerData = PlayerData.get(playerUUID);
 
-        if (unbanTime != null) {
-            if (unbanTime.after(now)) {
-                return true;
-            } else {
-                unbanPlayer(player);
+        if (playerData != null) {
+            Calendar unbanTime = playerData.getUnbanTimeCalendar();
+            Calendar now = Calendar.getInstance();
+
+            if (unbanTime != null) {
+                if (unbanTime.after(now)) {
+                    return true;
+                } else {
+                    unbanPlayer(playerUUID);
+                }
             }
         }
 

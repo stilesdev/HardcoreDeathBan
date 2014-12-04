@@ -24,6 +24,7 @@
 package com.mstiles92.plugins.hardcoredeathban.listeners;
 
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.data.PlayerData;
 import com.mstiles92.plugins.hardcoredeathban.util.Log;
 import com.mstiles92.plugins.hardcoredeathban.util.Utils;
 import org.bukkit.ChatColor;
@@ -35,61 +36,47 @@ import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 /**
- * PlayerListener is the class used to register the event handlers
- * needed for this plugin's operation.
- *
- * @author mstiles92
+ * PlayerListener is the class used to register the event handlers needed for this plugin's operation.
  */
 public class PlayerListener implements Listener {
-    private final HardcoreDeathBan plugin;
-
-    /**
-     * The main constructor used for this class.
-     *
-     * @param plugin the instance of the plugin
-     */
-    public PlayerListener(HardcoreDeathBan plugin) {
-        this.plugin = plugin;
-    }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerDeath(PlayerDeathEvent e) {
-        if (HardcoreDeathBan.getConfigObject().isEnabled() && !(e.getEntity().hasPermission("deathban.ban.exempt"))) {
-            Log.verbose("Player death: " + e.getEntity().getName());
-            plugin.bans.banPlayer(e.getEntity().getName());
+    public void onPlayerDeath(PlayerDeathEvent event) {
+        if (HardcoreDeathBan.getConfigObject().isEnabled() && !event.getEntity().hasPermission("deathban.ban.exempt")) {
+            Log.verbose("Player death: " + event.getEntity().getName());
+            Utils.banPlayer(event.getEntity());
         }
     }
 
     @EventHandler(ignoreCancelled = true)
-    public void onPlayerLogin(AsyncPlayerPreLoginEvent e) {
-        if (HardcoreDeathBan.getConfigObject().isEnabled()) {
-            if (plugin.bans.checkPlayerIsBanned(e.getName())) {
-                if (plugin.credits.getPlayerCredits(e.getName()) < 1) {
-                    Log.verbose("Banned player denied login: " + e.getName());
-                    String s = HardcoreDeathBan.getConfigObject().getEarlyMessage();
-                    e.disallow(Result.KICK_BANNED, Utils.replaceMessageVariables(s, e.getUniqueId()));
+    public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
+        PlayerData playerData = PlayerData.get(event.getUniqueId());
+
+        if (playerData != null) {
+            if (HardcoreDeathBan.getConfigObject().isEnabled() && Utils.checkPlayerBanned(event.getUniqueId())) {
+                if (playerData.getRevivalCredits() > 0) {
+                    Log.verbose("Banned player redeemed 1 revival credit upon login: " + event.getName());
+                    playerData.addRevivalCredits(-1);
+                    Utils.unbanPlayer(event.getUniqueId());
+                    event.allow();
                 } else {
-                    Log.verbose("Banned player redeemed 1 revival credit upon login: " + e.getName());
-                    plugin.credits.givePlayerCredits(e.getName(), -1);
-                    plugin.bans.unbanPlayer(e.getName());
-                    e.allow();
+                    Log.verbose("Banned player denied login: " + event.getName());
+                    String earlyMessage = Utils.replaceMessageVariables(HardcoreDeathBan.getConfigObject().getEarlyMessage(), event.getUniqueId());
+                    event.disallow(Result.KICK_BANNED, earlyMessage);
                 }
-            } else if (!plugin.credits.checkPlayerHasPlayedBefore(e.getName())) {
-                int startingCredits = HardcoreDeathBan.getConfigObject().getStartingCredits();
-                Log.verbose("New player recieved " + startingCredits + " revival credits upon their first login: " + e.getName());
-                plugin.credits.givePlayerCredits(e.getName(), startingCredits);
-                e.allow();
-            } else {
-                e.allow();
             }
         }
     }
 
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent e) {
-        if (HardcoreDeathBan.getInstance().getUpdateChecker().isUpdateAvailable() && e.getPlayer().hasPermission("deathban.receivealerts")) {
-            e.getPlayer().sendMessage(ChatColor.GREEN + "[HardcoreDeathBan] New version available! See http://dev.bukkit.org/bukkit-plugins/hardcoredeathban/ for more information.");
-            e.getPlayer().sendMessage(ChatColor.GREEN + "[HardcoreDeathBan] Current version: " + ChatColor.BLUE + plugin.getDescription().getVersion() + ChatColor.GREEN + ", New version: " + ChatColor.BLUE + HardcoreDeathBan.getInstance().getUpdateChecker().getNewVersion());
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        if (HardcoreDeathBan.getInstance().getUpdateChecker().isUpdateAvailable() && event.getPlayer().hasPermission("deathban.receivealerts")) {
+            String tag = ChatColor.BLUE + "[HardcoreDeathBan] " + ChatColor.GREEN;
+            String currentVersion = HardcoreDeathBan.getInstance().getDescription().getVersion();
+            String newVersion = HardcoreDeathBan.getInstance().getUpdateChecker().getNewVersion();
+
+            event.getPlayer().sendMessage(tag + "New version available! See http://dev.bukkit.org/bukkit-plugins/hardcoredeathban/ for more information.");
+            event.getPlayer().sendMessage(tag + "Current version: " + ChatColor.BLUE + currentVersion + ChatColor.GREEN + ", New version: " + ChatColor.BLUE + newVersion);
         }
     }
 }

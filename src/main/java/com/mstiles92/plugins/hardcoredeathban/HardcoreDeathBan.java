@@ -62,8 +62,6 @@ public class HardcoreDeathBan extends JavaPlugin {
         instance = this;
         config = new Config();
 
-        saveDefaultConfig();
-
         try {
             credits = new RevivalCredits(this, "credits.yml");
             bans = new Bans(this, "bans.yml");
@@ -71,6 +69,12 @@ public class HardcoreDeathBan extends JavaPlugin {
             Log.warning(ChatColor.RED + "Error opening a config file. Plugin will now be disabled.");
             getPluginLoader().disablePlugin(this);
         }
+
+        commandRegistry = new CommandRegistry(this);
+        commandRegistry.registerCommands(new Deathban());
+        commandRegistry.registerCommands(new Credits());
+
+        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
 
         if (config.shouldCheckForUpdates()) {
             updateChecker = new UpdateChecker(this, 42801, "hardcoredeathban", 216000);
@@ -83,12 +87,6 @@ public class HardcoreDeathBan extends JavaPlugin {
         } catch (IOException e) {
             Log.warning(ChatColor.RED + "Error starting metrics!");
         }
-
-        getServer().getPluginManager().registerEvents(new PlayerListener(this), this);
-
-        commandRegistry = new CommandRegistry(this);
-        commandRegistry.registerCommands(new Deathban());
-        commandRegistry.registerCommands(new Credits());
     }
 
     @Override
