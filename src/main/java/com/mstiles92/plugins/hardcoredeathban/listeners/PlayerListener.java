@@ -25,6 +25,7 @@ package com.mstiles92.plugins.hardcoredeathban.listeners;
 
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import com.mstiles92.plugins.hardcoredeathban.util.Log;
+import com.mstiles92.plugins.hardcoredeathban.util.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -66,7 +67,7 @@ public class PlayerListener implements Listener {
                 if (plugin.credits.getPlayerCredits(e.getName()) < 1) {
                     Log.verbose("Banned player denied login: " + e.getName());
                     String s = HardcoreDeathBan.getConfigObject().getEarlyMessage();
-                    e.disallow(Result.KICK_BANNED, plugin.replaceVariables(s, e.getName()));
+                    e.disallow(Result.KICK_BANNED, Utils.replaceMessageVariables(s, e.getUniqueId()));
                 } else {
                     Log.verbose("Banned player redeemed 1 revival credit upon login: " + e.getName());
                     plugin.credits.givePlayerCredits(e.getName(), -1);

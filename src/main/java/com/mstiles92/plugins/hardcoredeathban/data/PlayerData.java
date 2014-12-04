@@ -43,14 +43,6 @@ public class PlayerData {
     private long unbanTimeInMillis;
     private int revivalCredits;
 
-
-
-    private static PlayerData create(Player player) {
-        PlayerData data = new PlayerData(player);
-        instances.put(player.getUniqueId(), data);
-        return data;
-    }
-
     public static void init(File jsonFile) {
         file = jsonFile;
         try {
@@ -130,6 +122,12 @@ public class PlayerData {
         return builder.build();
     }
 
+    /**
+     * Get or create a PlayerData object for the specified player.
+     *
+     * @param player the Player who the PlayerData object will represent
+     * @return the PlayerData object corresponding to the Player, or a new one if they do not have one yet
+     */
     public static PlayerData get(Player player) {
         if (instances.containsKey(player.getUniqueId())) {
             PlayerData data = instances.get(player.getUniqueId());
@@ -138,6 +136,22 @@ public class PlayerData {
         } else {
             return create(player);
         }
+    }
+
+    /**
+     * Get the PlayerData object for the player with the specified UUID.
+     *
+     * @param playerUUID the UUID of the player who the PlayerData object will represent
+     * @return the PlayerData object corresponding to the Player, or null if they do not have one yet
+     */
+    public static PlayerData get(UUID playerUUID) {
+        return instances.get(playerUUID);
+    }
+
+    private static PlayerData create(Player player) {
+        PlayerData data = new PlayerData(player);
+        instances.put(player.getUniqueId(), data);
+        return data;
     }
 
     public String getLastSeenName() {

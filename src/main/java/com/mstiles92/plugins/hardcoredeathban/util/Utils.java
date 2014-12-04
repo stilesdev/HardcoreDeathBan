@@ -33,6 +33,7 @@ import org.bukkit.entity.Player;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -44,27 +45,29 @@ public class Utils {
      * Replace variables in admin-defined messages to be passed on to Players.
      *
      * @param message the message that potentially contains variables to be replaced
-     * @param player the Player who will be recieving this message
+     * @param playerUUID the UUID of the Player who will be recieving this message
      * @return the altered message with all of the variables filled in
      */
-    public static String replaceMessageVariables(String message, Player player) {
-        Calendar now = Calendar.getInstance();
-        Calendar unbanTime = PlayerData.get(player).getUnbanTimeCalendar();
+    public static String replaceMessageVariables(String message, UUID playerUUID) {
+        PlayerData playerData = PlayerData.get(playerUUID);
+
+        if (playerData != null) {
+            Calendar now = Calendar.getInstance();
+            Calendar unbanTime = playerData.getUnbanTimeCalendar();
+
+            message = message.replaceAll("%player%", playerData.getLastSeenName());
+
+            message = message.replaceAll("%currenttime%", TIME_FORMAT.format(now.getTime()));
+            message = message.replaceAll("%currentdate%", DATE_FORMAT.format(now.getTime()));
+
+            if (unbanTime != null) {
+                message = message.replaceAll("%unbantime%", TIME_FORMAT.format(unbanTime.getTime()));
+                message = message.replaceAll("%unbandate%", DATE_FORMAT.format(unbanTime.getTime()));
+                message = message.replaceAll("%bantimeleft%", CalendarUtils.buildTimeDifference(now, unbanTime));
+            }
+        }
 
         message = message.replaceAll("%server%", Bukkit.getServerName());
-
-        if (player != null) {
-            message = message.replaceAll("%player%", player.getName());
-        }
-
-        message = message.replaceAll("%currenttime%", TIME_FORMAT.format(now.getTime()));
-        message = message.replaceAll("%currentdate%", DATE_FORMAT.format(now.getTime()));
-
-        if (unbanTime != null) {
-            message = message.replaceAll("%unbantime%", TIME_FORMAT.format(unbanTime.getTime()));
-            message = message.replaceAll("%unbandate%", DATE_FORMAT.format(unbanTime.getTime()));
-            message = message.replaceAll("%bantimeleft%", CalendarUtils.buildTimeDifference(now, unbanTime));
-        }
 
         return message;
     }
@@ -104,6 +107,15 @@ public class Utils {
     }
 
     /**
+     * Unban the specified Player.
+     *
+     * @param player the Player who should be unbanned
+     */
+    public static void unbanPlayer(Player player) {
+        PlayerData.get(player).setUnbanTimeInMillis(-1);
+    }
+
+    /**
      * Get the death class for the Player specified by UUID.
      *
      * @param playerUUID the UUID of the Player whose death class should be found
@@ -130,5 +142,26 @@ public class Utils {
         }
 
         return null;
+    }
+
+    /**
+     * Check if the specified Player is currently banned.
+     *
+     * @param player the Player whose ban status should be checked
+     * @return true if the Player is banned, false if they are not
+     */
+    public static boolean checkPlayerBanned(Player player) {
+        Calendar unbanTime = PlayerData.get(player).getUnbanTimeCalendar();
+        Calendar now = new GregorianCalendar();
+
+        if (unbanTime != null) {
+            if (unbanTime.after(now)) {
+                return true;
+            } else {
+                unbanPlayer(player);
+            }
+        }
+
+        return false;
     }
 }
