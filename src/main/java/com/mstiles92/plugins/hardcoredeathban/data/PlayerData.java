@@ -148,6 +148,24 @@ public class PlayerData {
         return instances.get(playerUUID);
     }
 
+    /**
+     * Get the PlayerData object for the player with the specified name.
+     *
+     * @deprecated this is a slow lookup only to be used when both the player's UUID and Player object are not available
+     * @param playerName the name of the player who the PlayerData object will represent
+     * @return the PlayerData object corresponding to the Player, or null if one is not found for the given name
+     */
+    @Deprecated
+    public static PlayerData get(String playerName) {
+        for (PlayerData playerData : instances.values()) {
+            if (playerData.getLastSeenName().equals(playerName)) {
+                return playerData;
+            }
+        }
+
+        return null;
+    }
+
     private static PlayerData create(Player player) {
         PlayerData data = new PlayerData(player);
         instances.put(player.getUniqueId(), data);
