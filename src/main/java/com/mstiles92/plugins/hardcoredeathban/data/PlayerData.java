@@ -191,4 +191,13 @@ public class PlayerData {
     public void addRevivalCredits(int amount) {
         revivalCredits += amount;
     }
+
+    public boolean removeRevivalCredits(int amount) {
+        if (revivalCredits >= amount) {
+            revivalCredits -= amount;
+            return true;
+        } else {
+            return false;
+        }
+    }
 }
