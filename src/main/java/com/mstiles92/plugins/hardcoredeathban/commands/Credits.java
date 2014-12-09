@@ -23,10 +23,10 @@
 
 package com.mstiles92.plugins.hardcoredeathban.commands;
 
+import com.mstiles92.plugins.hardcoredeathban.data.PlayerData;
 import com.mstiles92.plugins.stileslib.commands.Arguments;
 import com.mstiles92.plugins.stileslib.commands.CommandHandler;
 import com.mstiles92.plugins.stileslib.commands.annotations.Command;
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import org.bukkit.ChatColor;
 
 /**
@@ -36,28 +36,25 @@ import org.bukkit.ChatColor;
  * @author mstiles92
  */
 public class Credits implements CommandHandler {
-    private final HardcoreDeathBan plugin;
-    private final String tag = ChatColor.GREEN + "[HardcoreDeathBan] ";
-
-    /**
-     * The main constructor for this class.
-     */
-    public Credits() {
-        this.plugin = HardcoreDeathBan.getInstance();
-    }
-
+    private final String tag = ChatColor.BLUE + "[HardcoreDeathBan] " + ChatColor.RESET;
 
     @Command(name = "credits", aliases = {"cr"}, permission = "deathban.credits.check")
     public void credit(Arguments args) {
         if (args.getArgs().length < 1) {
             if (args.isPlayer()) {
-                args.getPlayer().sendMessage(tag + "Revival credits: " + plugin.credits.getPlayerCredits(args.getPlayer().getName()));
+                args.getPlayer().sendMessage(tag + "Revival credits: " + PlayerData.get(args.getPlayer()).getRevivalCredits());
             } else {
                 args.getSender().sendMessage(tag + ChatColor.RED + "This command can not be run from the console unless a player is specified.");
             }
         } else {
             if (args.getSender().hasPermission("deathban.credits.check.others")) {
-                args.getSender().sendMessage(tag + args.getArgs()[0] + "'s revival credits: " + plugin.credits.getPlayerCredits(args.getArgs()[0]));
+                PlayerData otherPlayerData = PlayerData.get(args.getArgs()[0]);
+
+                if (otherPlayerData == null) {
+                    args.getSender().sendMessage(tag + ChatColor.RED + "The specified player could not be found.");
+                } else {
+                    args.getSender().sendMessage(tag + otherPlayerData.getLastSeenName() + "'s revival credits: " + otherPlayerData.getRevivalCredits());
+                }
             } else {
                 args.getSender().sendMessage(ChatColor.RED + "You do not have permission to perform this command.");
             }
@@ -66,22 +63,30 @@ public class Credits implements CommandHandler {
 
     @Command(name = "credits.send", aliases = {"cr.send"}, permission = "deathban.credits.send", playerOnly = true)
     public void send(Arguments args) {
-        if (args.getArgs().length < 3) {
+        if (args.getArgs().length < 2) {
             args.getPlayer().sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to send that player.");
             return;
         }
 
-        try {
-            if (Integer.parseInt(args.getArgs()[1]) < 1) throw new NumberFormatException();
-            if (plugin.credits.getPlayerCredits(args.getPlayer().getName()) >= Integer.parseInt(args.getArgs()[1])) {
-                plugin.credits.givePlayerCredits(args.getPlayer().getName(), Integer.parseInt(args.getArgs()[1]) * -1);
-                plugin.credits.givePlayerCredits(args.getArgs()[0], Integer.parseInt(args.getArgs()[1]));
-                args.getPlayer().sendMessage(tag + "You have successfully sent " + args.getArgs()[0] + " " + args.getArgs()[1] + " revival credits.");
+        int creditsArg = tryParseInt(args.getArgs()[1]);
+
+        if (creditsArg < 1) {
+            args.getPlayer().sendMessage(tag + ChatColor.RED + "The amount of credits specified must be a positive integer value.");
+            return;
+        }
+
+        PlayerData playerData = PlayerData.get(args.getPlayer());
+        PlayerData otherPlayerData = PlayerData.get(args.getArgs()[0]);
+
+        if (otherPlayerData == null) {
+            args.getPlayer().sendMessage(tag + ChatColor.RED + "The specified player could not be found.");
+        } else {
+            if (playerData.removeRevivalCredits(creditsArg)) {
+                otherPlayerData.addRevivalCredits(creditsArg);
+                args.getPlayer().sendMessage(tag + "You have successfully sent " + otherPlayerData.getLastSeenName() + " " + creditsArg + " revival credits.");
             } else {
                 args.getPlayer().sendMessage(tag + ChatColor.RED + "You do not have enough revival credits.");
             }
-        } catch (NumberFormatException e) {
-            args.getPlayer().sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
         }
     }
 
@@ -92,28 +97,61 @@ public class Credits implements CommandHandler {
             return;
         }
 
-        try {
-            if (Integer.parseInt(args.getArgs()[1]) < 1) throw new NumberFormatException();
-            plugin.credits.givePlayerCredits(args.getArgs()[0], Integer.parseInt(args.getArgs()[1]));
-            args.getSender().sendMessage(tag + "You have successfully given " + args.getArgs()[0] + " " + args.getArgs()[1] + " revival credits.");
-        } catch (NumberFormatException e) {
-            args.getSender().sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
+        int creditsArg = tryParseInt(args.getArgs()[1]);
+
+        if (creditsArg < 1) {
+            args.getSender().sendMessage(tag + ChatColor.RED + "The amount of credits specified must be a positive integer value.");
+            return;
+        }
+
+        PlayerData otherPlayerData = PlayerData.get(args.getArgs()[0]);
+
+        if (otherPlayerData == null) {
+            args.getSender().sendMessage(tag + ChatColor.RED + "The specified player could not be found.");
+        } else {
+            otherPlayerData.addRevivalCredits(creditsArg);
+            args.getSender().sendMessage(tag + "You have successfully given " + otherPlayerData.getLastSeenName() + " " + creditsArg + " revival credits.");
         }
     }
 
     @Command(name = "credits.take", aliases = {"cr.take"}, permission = "deathban.credits.take")
     public void take(Arguments args) {
         if (args.getArgs().length < 2) {
-            args.getSender().sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to give that player.");
+            args.getSender().sendMessage(tag + ChatColor.RED + "You must specify both a player and an amount to take from that player.");
             return;
         }
 
+        int creditsArg = tryParseInt(args.getArgs()[1]);
+
+        if (creditsArg < 1) {
+            args.getSender().sendMessage(tag + ChatColor.RED + "The amount of credits specified must be a positive integer value.");
+            return;
+        }
+
+        PlayerData otherPlayerData = PlayerData.get(args.getArgs()[0]);
+
+        if (otherPlayerData == null) {
+            args.getSender().sendMessage(tag + ChatColor.RED + "The specified player could not be found.");
+        } else {
+            if (otherPlayerData.removeRevivalCredits(creditsArg)) {
+                args.getSender().sendMessage(tag + "You have successfully taken " + creditsArg + " revival credits from " + otherPlayerData.getLastSeenName() + ".");
+            } else {
+                args.getSender().sendMessage(tag + ChatColor.RED + "Player " + otherPlayerData.getLastSeenName() + " only has " + otherPlayerData.getRevivalCredits() + " revival credits remaining.");
+            }
+        }
+    }
+
+    /**
+     * Attempt to parse a String into an int value.
+     *
+     * @param toParse the String to parse
+     * @return the parsed int value of the String, or -1 if the String does not represent a parsable int value
+     */
+    private int tryParseInt(String toParse) {
         try {
-            if (Integer.parseInt(args.getArgs()[1]) < 1) throw new NumberFormatException();
-            plugin.credits.givePlayerCredits(args.getArgs()[0], Integer.parseInt(args.getArgs()[1]) * -1);
-            args.getSender().sendMessage(tag + "You have successfully taken " + args.getArgs()[1] + " revival credits from " + args.getArgs()[0] + ".");
+            return Integer.parseInt(toParse);
         } catch (NumberFormatException e) {
-            args.getSender().sendMessage(tag + ChatColor.RED + "The amount must be specified as a positive integer value.");
+            return -1;
         }
     }
 }
