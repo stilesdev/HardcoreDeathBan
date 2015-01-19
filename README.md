@@ -123,7 +123,9 @@ If you have found a bug with the plugin or would like to suggest a feature to be
 ## Links ##
 
 [BukkitDev Page](http://dev.bukkit.org/bukkit-plugins/hardcoredeathban/)
+
 [GitHub Repository](http://github.com/mstiles92/HardcoreDeathBan)
+
 [Twitter](http://twitter.com/mstiles92)
 
 
