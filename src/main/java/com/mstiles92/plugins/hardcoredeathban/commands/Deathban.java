@@ -39,15 +39,7 @@ import org.bukkit.entity.Player;
  * @author mstiles92
  */
 public class Deathban implements CommandHandler {
-    private final HardcoreDeathBan plugin;
-    private final String tag = ChatColor.GREEN + "[HardcoreDeathBan] ";
-
-    /**
-     * The main constructor for this class.
-     */
-    public Deathban() {
-        this.plugin = HardcoreDeathBan.getInstance();
-    }
+    private final String tag = ChatColor.BLUE + "[HardcoreDeathBan] " + ChatColor.RESET;
 
     @Command(name = "deathban", aliases = {"db", "hdb"}, permission = "deathban.display")
     public void deathban(Arguments args) {
@@ -70,9 +62,9 @@ public class Deathban implements CommandHandler {
         HardcoreDeathBan.getConfigObject().setEnabled(true);
         args.getSender().sendMessage(tag + "Enabled!");
 
-        for (Player p : plugin.getServer().getOnlinePlayers()) {
-            if (plugin.bans.checkPlayerIsBanned(p.getName())) {
-                p.kickPlayer(Utils.replaceMessageVariables(HardcoreDeathBan.getConfigObject().getEarlyMessage(), p.getUniqueId()));
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            if (Utils.checkPlayerBanned(player.getUniqueId())) {
+                player.kickPlayer(Utils.replaceMessageVariables(HardcoreDeathBan.getConfigObject().getEarlyMessage(), player.getUniqueId()));
             }
         }
     }
@@ -92,20 +84,23 @@ public class Deathban implements CommandHandler {
 
         Player player = Bukkit.getPlayer(args.getArgs()[0]);
 
-        if (player != null && player.hasPermission("deathban.ban.exempt")) {
+        if (player == null) {
+            args.getSender().sendMessage(tag + ChatColor.RED + "The specified player could not be found.");
+            return;
+        }
+
+        if (player.hasPermission("deathban.ban.exempt")) {
             args.getSender().sendMessage(tag + ChatColor.RED + "This player can not be banned!");
             return;
         }
 
         if (args.getArgs().length < 2) {
-            plugin.bans.banPlayer(args.getArgs()[0]);
+            Utils.banPlayer(player);
         } else {
-            plugin.bans.banPlayer(args.getArgs()[0], args.getArgs()[1]);
+            Utils.banPlayer(player, args.getArgs()[1]);
         }
 
-        if (player != null) {
-            args.getSender().sendMessage(tag + Utils.replaceMessageVariables("%player% is now banned until %unbantime% %unbandate%", player.getUniqueId()));
-        }
+        args.getSender().sendMessage(tag + Utils.replaceMessageVariables("%player% is now banned until %unbantime% %unbandate%", player.getUniqueId()));
     }
 
     @Command(name = "deathban.unban", aliases = {"db.unban", "hdb.unban"}, permission = "deathban.unban")
@@ -115,11 +110,18 @@ public class Deathban implements CommandHandler {
             return;
         }
 
-        if (plugin.bans.checkPlayerIsBanned(args.getArgs()[0])) {
-            plugin.bans.unbanPlayer(args.getArgs()[0]);
-            args.getSender().sendMessage(tag + args.getArgs()[0] + " has been unbanned.");
+        Player player = Bukkit.getPlayer(args.getArgs()[0]);
+
+        if (player == null) {
+            args.getSender().sendMessage(tag + ChatColor.RED + "The specified player could not be found.");
+            return;
+        }
+
+        if (Utils.checkPlayerBanned(player.getUniqueId())) {
+            Utils.unbanPlayer(player);
+            args.getSender().sendMessage(tag + player.getName() + " has been unbanned.");
         } else {
-            args.getSender().sendMessage(tag + args.getArgs()[0] + " is not currently banned.");
+            args.getSender().sendMessage(tag + player.getName() + " is not currently banned.");
         }
     }
 
@@ -130,14 +132,17 @@ public class Deathban implements CommandHandler {
             return;
         }
 
-        if (plugin.bans.checkPlayerIsBanned(args.getArgs()[0])) {
-            Player player = Bukkit.getPlayer(args.getArgs()[0]);
+        Player player = Bukkit.getPlayer(args.getArgs()[0]);
 
-            if (player != null) {
-                args.getSender().sendMessage(tag + Utils.replaceMessageVariables("%player% is banned until %unbantime% %unbandate%", player.getUniqueId()));
-            }
+        if (player == null) {
+            args.getSender().sendMessage(tag + ChatColor.RED + "The specified player could not be found.");
+            return;
+        }
+
+        if (Utils.checkPlayerBanned(player.getUniqueId())) {
+            args.getSender().sendMessage(tag + Utils.replaceMessageVariables("%player% is banned until %unbantime% %unbandate%", player.getUniqueId()));
         } else {
-            args.getSender().sendMessage(tag + args.getArgs()[0] + " is not currently banned.");
+            args.getSender().sendMessage(tag + player.getName() + " is not currently banned.");
         }
     }
 }
