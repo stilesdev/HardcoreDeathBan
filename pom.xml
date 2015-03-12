@@ -10,7 +10,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <bukkitVersion>1.7.10-R0.1-SNAPSHOT</bukkitVersion>
+        <bukkitVersion>1.7.9-R0.2</bukkitVersion>
     </properties>
 
     <build>
@@ -89,13 +89,6 @@
             <groupId>org.bukkit</groupId>
             <artifactId>bukkit</artifactId>
             <version>${bukkitVersion}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.bukkit</groupId>
-            <artifactId>craftbukkit</artifactId>
-            <version>${bukkitVersion}</version>
-            <scope>runtime</scope>
         </dependency>
 
         <dependency>
