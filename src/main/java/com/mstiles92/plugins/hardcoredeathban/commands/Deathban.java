@@ -134,17 +134,17 @@ public class Deathban implements CommandHandler {
             return;
         }
 
-        Player player = Bukkit.getPlayer(args.getArgs()[0]);
+        PlayerData playerData = PlayerData.get(args.getArgs()[0]);
 
-        if (player == null) {
+        if (playerData == null) {
             args.getSender().sendMessage(tag + ChatColor.RED + "The specified player could not be found.");
             return;
         }
 
-        if (Utils.checkPlayerBanned(player.getUniqueId())) {
-            args.getSender().sendMessage(tag + Utils.replaceMessageVariables("%player% is banned until %unbantime% %unbandate%", player.getUniqueId()));
+        if (Utils.checkPlayerBanned(playerData.getPlayerUUID())) {
+            args.getSender().sendMessage(tag + Utils.replaceMessageVariables("%player% is banned until %unbantime% %unbandate%", playerData.getPlayerUUID()));
         } else {
-            args.getSender().sendMessage(tag + player.getName() + " is not currently banned.");
+            args.getSender().sendMessage(tag + playerData.getLastSeenName() + " is not currently banned.");
         }
     }
 }
