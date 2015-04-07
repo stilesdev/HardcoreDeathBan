@@ -23,7 +23,9 @@
 
 package com.mstiles92.plugins.hardcoredeathban.commands;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 
 import com.mstiles92.plugins.hardcoredeathban.data.PlayerData;
 import com.mstiles92.plugins.stileslib.commands.Arguments;
@@ -105,7 +107,15 @@ public class Credits implements CommandHandler {
             return;
         }
 
-        PlayerData otherPlayerData = PlayerData.get(args.getArgs()[0]);
+		PlayerData otherPlayerData = PlayerData.get(args.getArgs()[0]);
+
+		if (otherPlayerData == null) {
+			OfflinePlayer otherOfflinePlayer = Bukkit.getOfflinePlayer(args.getArgs()[0]);
+
+			if (otherOfflinePlayer.getPlayer() != null) {
+				otherPlayerData = PlayerData.get(otherOfflinePlayer.getPlayer());
+			}
+		}
 
         if (otherPlayerData == null) {
             args.getSender().sendMessage(tag + ChatColor.RED + "The specified player could not be found.");
