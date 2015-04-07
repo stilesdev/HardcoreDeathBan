@@ -28,6 +28,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.data.PlayerData;
 import com.mstiles92.plugins.hardcoredeathban.util.Utils;
 import com.mstiles92.plugins.stileslib.commands.Arguments;
 import com.mstiles92.plugins.stileslib.commands.CommandHandler;
@@ -111,18 +112,18 @@ public class Deathban implements CommandHandler {
             return;
         }
 
-        Player player = Bukkit.getPlayer(args.getArgs()[0]);
+        PlayerData playerData = PlayerData.get(args.getArgs()[0]);
 
-        if (player == null) {
+        if (playerData == null) {
             args.getSender().sendMessage(tag + ChatColor.RED + "The specified player could not be found.");
             return;
         }
 
-        if (Utils.checkPlayerBanned(player.getUniqueId())) {
-            Utils.unbanPlayer(player);
-            args.getSender().sendMessage(tag + player.getName() + " has been unbanned.");
+        if (Utils.checkPlayerBanned(playerData.getPlayerUUID())) {
+            Utils.unbanPlayer(playerData.getPlayerUUID());
+            args.getSender().sendMessage(tag + playerData.getLastSeenName() + " has been unbanned.");
         } else {
-            args.getSender().sendMessage(tag + player.getName() + " is not currently banned.");
+            args.getSender().sendMessage(tag + playerData.getLastSeenName() + " is not currently banned.");
         }
     }
 

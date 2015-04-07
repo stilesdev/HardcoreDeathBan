@@ -52,6 +52,7 @@ public class PlayerData {
     private static File file;
     private static Map<UUID, PlayerData> instances = new HashMap<>();
 
+	private transient UUID uuid;
     private String lastSeenName;
     private long unbanTimeInMillis;
     private int revivalCredits;
@@ -114,7 +115,8 @@ public class PlayerData {
         instances.clear();
 
         for (Map.Entry<String, JsonValue> entry : json.entrySet()) {
-            instances.put(UUID.fromString(entry.getKey()), new PlayerData((JsonObject) entry.getValue()));
+        	UUID playerUuid = UUID.fromString(entry.getKey());
+            instances.put(playerUuid, new PlayerData((JsonObject) entry.getValue(), playerUuid));
         }
     }
 
@@ -126,13 +128,15 @@ public class PlayerData {
         return builder.build();
     }
 
-    private PlayerData(JsonObject json) {
+    private PlayerData(JsonObject json, UUID playerUuid) {
+    	this.uuid = playerUuid;
         lastSeenName = json.getString("lastSeenName");
         unbanTimeInMillis = json.getJsonNumber("unbanTimeInMillis").longValueExact();
         revivalCredits = json.getInt("revivalCredits");
     }
 
     private PlayerData(Player player) {
+    	this.uuid = player.getUniqueId();
         lastSeenName = player.getName();
         unbanTimeInMillis = -1;
         revivalCredits = HardcoreDeathBan.getConfigObject().getStartingCredits(); //TODO: check for death classes as well
@@ -242,4 +246,8 @@ public class PlayerData {
             return false;
         }
     }
+
+	public UUID getPlayerUUID() {
+		return this.uuid;
+	}
 }
