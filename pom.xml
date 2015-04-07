@@ -15,6 +15,7 @@
 
     <build>
         <defaultGoal>clean package</defaultGoal>
+        <finalName>HardcoreDeathBan</finalName>
 
         <resources>
             <resource>
