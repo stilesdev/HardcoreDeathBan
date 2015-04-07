@@ -72,6 +72,22 @@ public class Utils {
         return message;
     }
 
+	/**
+     * Ban the specified Player from the server. They will be banned for the amount of time specified by their death
+     * class if they have one, or for the amount of time specified in the plugin's config if they do not.
+     *
+     * @param playerUuid the UUID of the player who should be banned
+     */
+	public static void banPlayer(UUID playerUuid) {
+        DeathClass deathClass = getDeathClass(playerUuid);
+
+        if (deathClass == null) {
+            banPlayer(playerUuid, HardcoreDeathBan.getConfigObject().getBanTime());
+        } else {
+            banPlayer(playerUuid, deathClass.getBanTime());
+        }
+    }
+
     /**
      * Ban the specified Player from the server. They will be banned for the amount of time specified by their death
      * class if they have one, or for the amount of time specified in the plugin's config if they do not.
@@ -79,12 +95,28 @@ public class Utils {
      * @param player the Player who should be banned
      */
     public static void banPlayer(Player player) {
-        DeathClass deathClass = getDeathClass(player);
+        banPlayer(player.getUniqueId());
+    }
 
-        if (deathClass == null) {
-            banPlayer(player, HardcoreDeathBan.getConfigObject().getBanTime());
-        } else {
-            banPlayer(player, deathClass.getBanTime());
+    /**
+     * Ban the specified Player from the server for a specific amount of time.
+     *
+     * @param playerUuid the UUID of the player who should be banned
+     * @param banTime the amount of time the Player should be banned for
+     */
+    public static void banPlayer(UUID playerUuid, String banTime) {
+		Player player = Bukkit.getPlayer(playerUuid);
+
+        if (player != null && !player.hasPermission("deathban.ban.exempt")) {
+            return;
+        }        
+
+        Calendar unbanDate = CalendarUtils.parseTimeDifference(banTime);
+        PlayerData.get(playerUuid).setUnbanTimeInMillis(unbanDate.getTimeInMillis());
+
+        if (player != null && player.isOnline()) {
+            KickRunnable runnable = new KickRunnable(player.getUniqueId());
+            runnable.runTaskLater(HardcoreDeathBan.getInstance(), HardcoreDeathBan.getConfigObject().getTickDelay());
         }
     }
 
@@ -95,15 +127,7 @@ public class Utils {
      * @param banTime the amount of time the Player should be banned for
      */
     public static void banPlayer(Player player, String banTime) {
-        if (!player.hasPermission("deathban.ban.exempt")) {
-            Calendar unbanDate = CalendarUtils.parseTimeDifference(banTime);
-            PlayerData.get(player).setUnbanTimeInMillis(unbanDate.getTimeInMillis());
-
-            if (player.isOnline()) {
-                KickRunnable runnable = new KickRunnable(player.getUniqueId());
-                runnable.runTaskLater(HardcoreDeathBan.getInstance(), HardcoreDeathBan.getConfigObject().getTickDelay());
-            }
-        }
+        banPlayer(player.getUniqueId(), banTime);
     }
 
     /**
