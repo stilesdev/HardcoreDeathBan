@@ -6,6 +6,8 @@ Tick-Delay: 15
 Starting-Credits: 0
 Verbose: false
 Check-for-Updates: true
+PlayerData-Autosave-Enabled: true
+PlayerData-Autosave-Seconds: 300
 Death-Classes:
   Donator:
     Ban-Time: 1h

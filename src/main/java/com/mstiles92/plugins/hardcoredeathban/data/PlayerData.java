@@ -43,8 +43,10 @@ import javax.json.JsonWriter;
 import javax.json.stream.JsonGenerator;
 
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.util.Log;
 
 public class PlayerData {
     private static File file;
@@ -96,6 +98,17 @@ public class PlayerData {
             e.printStackTrace();
         }
     }
+
+	public static void startAutosaveTask() {
+		final int delay = HardcoreDeathBan.getConfigObject().playerDataAutosaveSeconds() * 20;
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				save();
+				Log.info("Player data has been automatically saved.");
+			}
+		}.runTaskTimer(HardcoreDeathBan.getInstance(), delay, delay);
+	}
 
     private static void deserialize(JsonObject json) {
         instances.clear();

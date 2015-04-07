@@ -63,6 +63,10 @@ public class HardcoreDeathBan extends JavaPlugin {
         config = new Config();
 
 		PlayerData.init(PLAYERDATA_JSON_FILE);
+		// Start autosave task (if enabled)
+		if (this.getConfigObject().playerDataAutosaveEnabled()) {
+			PlayerData.startAutosaveTask();
+		}
 
         commandRegistry = new CommandRegistry(this);
         commandRegistry.registerCommands(new Deathban());

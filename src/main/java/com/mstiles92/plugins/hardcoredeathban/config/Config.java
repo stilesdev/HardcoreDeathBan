@@ -42,6 +42,8 @@ public class Config {
     private int startingCredits;
     private boolean verboseLoggingEnabled;
     private boolean updateCheckingEnabled;
+    private boolean playerDataAutosaveEnabled;
+    private int playerDataAutosaveSeconds;
     private List<DeathClass> deathClasses = new ArrayList<>();
 
     public Config() {
@@ -60,6 +62,8 @@ public class Config {
         startingCredits = config.getInt("Starting-Credits", 0);
         verboseLoggingEnabled = config.getBoolean("Verbose", false);
         updateCheckingEnabled = config.getBoolean("Check-for-Updates", true);
+        playerDataAutosaveEnabled = config.getBoolean("PlayerData-Autosave-Enabled", true);
+        playerDataAutosaveSeconds = config.getInt("PlayerData-Autosave-Seconds", 300);
 
         ConfigurationSection section = config.getConfigurationSection("Death-Classes");
         if (section != null) {
@@ -111,6 +115,14 @@ public class Config {
     public boolean shouldCheckForUpdates() {
         return updateCheckingEnabled;
     }
+
+	public boolean playerDataAutosaveEnabled() {
+		return playerDataAutosaveEnabled;
+	}
+
+	public int playerDataAutosaveSeconds() {
+		return playerDataAutosaveSeconds;
+	}
 
     public List<DeathClass> getDeathClasses() {
         return deathClasses;
