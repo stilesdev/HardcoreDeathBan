@@ -23,23 +23,23 @@
 
 package com.mstiles92.plugins.hardcoredeathban;
 
-import com.mstiles92.plugins.hardcoredeathban.config.Config;
-import com.mstiles92.plugins.hardcoredeathban.util.Log;
-import com.mstiles92.plugins.stileslib.calendar.CalendarUtils;
-import com.mstiles92.plugins.stileslib.commands.CommandRegistry;
-import com.mstiles92.plugins.stileslib.updates.UpdateChecker;
-import com.mstiles92.plugins.hardcoredeathban.commands.Credits;
-import com.mstiles92.plugins.hardcoredeathban.commands.Deathban;
-import com.mstiles92.plugins.hardcoredeathban.listeners.PlayerListener;
-import com.mstiles92.plugins.hardcoredeathban.util.Bans;
-import com.mstiles92.plugins.hardcoredeathban.util.RevivalCredits;
+import java.io.IOException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
-import java.io.IOException;
+import com.mstiles92.plugins.hardcoredeathban.commands.Credits;
+import com.mstiles92.plugins.hardcoredeathban.commands.Deathban;
+import com.mstiles92.plugins.hardcoredeathban.config.Config;
+import com.mstiles92.plugins.hardcoredeathban.listeners.PlayerListener;
+import com.mstiles92.plugins.hardcoredeathban.util.Bans;
+import com.mstiles92.plugins.hardcoredeathban.util.Log;
+import com.mstiles92.plugins.hardcoredeathban.util.RevivalCredits;
+import com.mstiles92.plugins.stileslib.commands.CommandRegistry;
+import com.mstiles92.plugins.stileslib.updates.UpdateChecker;
 
 /**
  * HardcoreDeathBan is the main class of this Bukkit plugin.

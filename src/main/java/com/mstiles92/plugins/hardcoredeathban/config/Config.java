@@ -23,13 +23,14 @@
 
 package com.mstiles92.plugins.hardcoredeathban.config;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
-import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
 
 public class Config {
     private FileConfiguration config;

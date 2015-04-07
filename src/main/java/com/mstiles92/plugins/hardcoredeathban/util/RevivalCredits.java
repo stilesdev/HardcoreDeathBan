@@ -23,12 +23,13 @@
 
 package com.mstiles92.plugins.hardcoredeathban.util;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import java.io.File;
+import java.io.IOException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.YamlConfiguration;
 
-import java.io.File;
-import java.io.IOException;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 
 /**
  * RevivalCredits is the class used to store the amount of credits each player

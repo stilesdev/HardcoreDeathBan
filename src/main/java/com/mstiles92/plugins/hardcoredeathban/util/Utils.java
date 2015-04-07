@@ -23,19 +23,19 @@
 
 package com.mstiles92.plugins.hardcoredeathban.util;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.List;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
+
 import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
 import com.mstiles92.plugins.hardcoredeathban.data.PlayerData;
 import com.mstiles92.plugins.hardcoredeathban.tasks.KickRunnable;
 import com.mstiles92.plugins.stileslib.calendar.CalendarUtils;
-import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
-
-import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.GregorianCalendar;
-import java.util.List;
-import java.util.UUID;
 
 public class Utils {
     private static final SimpleDateFormat TIME_FORMAT = new SimpleDateFormat("hh:mm a z");

@@ -23,10 +23,6 @@
 
 package com.mstiles92.plugins.hardcoredeathban.listeners;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
-import com.mstiles92.plugins.hardcoredeathban.data.PlayerData;
-import com.mstiles92.plugins.hardcoredeathban.util.Log;
-import com.mstiles92.plugins.hardcoredeathban.util.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -34,6 +30,11 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent.Result;
 import org.bukkit.event.player.PlayerJoinEvent;
+
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.data.PlayerData;
+import com.mstiles92.plugins.hardcoredeathban.util.Log;
+import com.mstiles92.plugins.hardcoredeathban.util.Utils;
 
 /**
  * PlayerListener is the class used to register the event handlers needed for this plugin's operation.

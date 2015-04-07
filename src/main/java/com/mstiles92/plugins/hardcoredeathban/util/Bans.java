@@ -23,20 +23,18 @@
 
 package com.mstiles92.plugins.hardcoredeathban.util;
 
-import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
-import com.mstiles92.plugins.stileslib.calendar.CalendarUtils;
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
-import com.mstiles92.plugins.hardcoredeathban.tasks.KickRunnable;
-import org.bukkit.ChatColor;
-import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
-import java.util.Set;
+
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
+
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
+import com.mstiles92.plugins.hardcoredeathban.tasks.KickRunnable;
+import com.mstiles92.plugins.stileslib.calendar.CalendarUtils;
 
 /**
  * Bans is a class used to store and modify the ban length of each player.

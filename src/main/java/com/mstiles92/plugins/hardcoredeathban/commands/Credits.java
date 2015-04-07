@@ -23,11 +23,12 @@
 
 package com.mstiles92.plugins.hardcoredeathban.commands;
 
+import org.bukkit.ChatColor;
+
 import com.mstiles92.plugins.hardcoredeathban.data.PlayerData;
 import com.mstiles92.plugins.stileslib.commands.Arguments;
 import com.mstiles92.plugins.stileslib.commands.CommandHandler;
 import com.mstiles92.plugins.stileslib.commands.annotations.Command;
-import org.bukkit.ChatColor;
 
 /**
  * Credits is the CommandExecutor that handles all commands dealing
