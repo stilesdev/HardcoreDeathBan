@@ -186,7 +186,7 @@ public class PlayerData {
     @Deprecated
     public static PlayerData get(String playerName) {
         for (PlayerData playerData : instances.values()) {
-            if (playerData.getLastSeenName().equals(playerName)) {
+            if (playerData.getLastSeenName().equalsIgnoreCase(playerName)) {
                 return playerData;
             }
         }
