@@ -200,4 +200,14 @@ public class Utils {
 
         return false;
     }
+
+    /**
+     * Check if the specified Player is currently banned.
+     *
+     * @param player the Player whose ban status should be checked
+     * @return true if the Player is banned, false if they are not
+     */
+    public static boolean checkPlayerBanned(Player player) {
+        return checkPlayerBanned(player.getUniqueId());
+    }
 }
