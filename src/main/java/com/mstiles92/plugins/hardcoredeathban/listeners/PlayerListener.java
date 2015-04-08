@@ -41,7 +41,7 @@ import com.mstiles92.plugins.hardcoredeathban.util.Utils;
  */
 public class PlayerListener implements Listener {
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onPlayerDeath(PlayerDeathEvent event) {
         if (HardcoreDeathBan.getConfigObject().isEnabled() && !event.getEntity().hasPermission("deathban.ban.exempt")) {
             Log.verbose("Player death: " + event.getEntity().getName());
@@ -49,7 +49,7 @@ public class PlayerListener implements Listener {
         }
     }
 
-    @EventHandler(ignoreCancelled = true)
+    @EventHandler
     public void onAsyncPlayerPreLogin(AsyncPlayerPreLoginEvent event) {
         PlayerData playerData = PlayerData.get(event.getUniqueId());
 
