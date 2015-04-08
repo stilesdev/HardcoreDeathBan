@@ -107,12 +107,17 @@ public class Utils {
     public static void banPlayer(UUID playerUuid, String banTime) {
 		Player player = Bukkit.getPlayer(playerUuid);
 
-        if (player != null && !player.hasPermission("deathban.ban.exempt")) {
+        if (player != null && player.hasPermission("deathban.ban.exempt")) {
             return;
-        }        
+        }
+
+        PlayerData playerData = PlayerData.get(playerUuid);
+        if (playerData == null && player != null && player.isOnline()) {
+        	playerData = PlayerData.get(player);
+        }
 
         Calendar unbanDate = CalendarUtils.parseTimeDifference(banTime);
-        PlayerData.get(playerUuid).setUnbanTimeInMillis(unbanDate.getTimeInMillis());
+        playerData.setUnbanTimeInMillis(unbanDate.getTimeInMillis());
 
         if (player != null && player.isOnline()) {
             KickRunnable runnable = new KickRunnable(player.getUniqueId());
