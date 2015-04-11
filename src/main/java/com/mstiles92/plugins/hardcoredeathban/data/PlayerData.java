@@ -23,22 +23,36 @@
 
 package com.mstiles92.plugins.hardcoredeathban.data;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
-import org.bukkit.entity.Player;
-
-import javax.json.*;
-import javax.json.stream.JsonGenerator;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
+import javax.json.Json;
+import javax.json.JsonObject;
+import javax.json.JsonObjectBuilder;
+import javax.json.JsonReader;
+import javax.json.JsonValue;
+import javax.json.JsonWriter;
+import javax.json.stream.JsonGenerator;
+
+import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.util.Log;
 
 public class PlayerData {
     private static File file;
     private static Map<UUID, PlayerData> instances = new HashMap<>();
 
+	private transient UUID uuid;
     private String lastSeenName;
     private long unbanTimeInMillis;
     private int revivalCredits;
@@ -86,11 +100,23 @@ public class PlayerData {
         }
     }
 
+	public static void startAutosaveTask() {
+		final int delay = HardcoreDeathBan.getConfigObject().playerDataAutosaveSeconds() * 20;
+		new BukkitRunnable() {
+			@Override
+			public void run() {
+				save();
+				Log.info("Player data has been automatically saved.");
+			}
+		}.runTaskTimer(HardcoreDeathBan.getInstance(), delay, delay);
+	}
+
     private static void deserialize(JsonObject json) {
         instances.clear();
 
         for (Map.Entry<String, JsonValue> entry : json.entrySet()) {
-            instances.put(UUID.fromString(entry.getKey()), new PlayerData((JsonObject) entry.getValue()));
+        	UUID playerUuid = UUID.fromString(entry.getKey());
+            instances.put(playerUuid, new PlayerData((JsonObject) entry.getValue(), playerUuid));
         }
     }
 
@@ -102,13 +128,15 @@ public class PlayerData {
         return builder.build();
     }
 
-    private PlayerData(JsonObject json) {
+    private PlayerData(JsonObject json, UUID playerUuid) {
+    	this.uuid = playerUuid;
         lastSeenName = json.getString("lastSeenName");
         unbanTimeInMillis = json.getJsonNumber("unbanTimeInMillis").longValueExact();
         revivalCredits = json.getInt("revivalCredits");
     }
 
     private PlayerData(Player player) {
+    	this.uuid = player.getUniqueId();
         lastSeenName = player.getName();
         unbanTimeInMillis = -1;
         revivalCredits = HardcoreDeathBan.getConfigObject().getStartingCredits(); //TODO: check for death classes as well
@@ -158,7 +186,7 @@ public class PlayerData {
     @Deprecated
     public static PlayerData get(String playerName) {
         for (PlayerData playerData : instances.values()) {
-            if (playerData.getLastSeenName().equals(playerName)) {
+            if (playerData.getLastSeenName().equalsIgnoreCase(playerName)) {
                 return playerData;
             }
         }
@@ -218,4 +246,8 @@ public class PlayerData {
             return false;
         }
     }
+
+	public UUID getPlayerUUID() {
+		return this.uuid;
+	}
 }

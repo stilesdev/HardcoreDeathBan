@@ -23,13 +23,14 @@
 
 package com.mstiles92.plugins.hardcoredeathban.config;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
-import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
+import java.util.ArrayList;
+import java.util.List;
+
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
 
 public class Config {
     private FileConfiguration config;
@@ -41,6 +42,8 @@ public class Config {
     private int startingCredits;
     private boolean verboseLoggingEnabled;
     private boolean updateCheckingEnabled;
+    private boolean playerDataAutosaveEnabled;
+    private int playerDataAutosaveSeconds;
     private List<DeathClass> deathClasses = new ArrayList<>();
 
     public Config() {
@@ -59,6 +62,8 @@ public class Config {
         startingCredits = config.getInt("Starting-Credits", 0);
         verboseLoggingEnabled = config.getBoolean("Verbose", false);
         updateCheckingEnabled = config.getBoolean("Check-for-Updates", true);
+        playerDataAutosaveEnabled = config.getBoolean("PlayerData-Autosave-Enabled", true);
+        playerDataAutosaveSeconds = config.getInt("PlayerData-Autosave-Seconds", 300);
 
         ConfigurationSection section = config.getConfigurationSection("Death-Classes");
         if (section != null) {
@@ -110,6 +115,14 @@ public class Config {
     public boolean shouldCheckForUpdates() {
         return updateCheckingEnabled;
     }
+
+	public boolean playerDataAutosaveEnabled() {
+		return playerDataAutosaveEnabled;
+	}
+
+	public int playerDataAutosaveSeconds() {
+		return playerDataAutosaveSeconds;
+	}
 
     public List<DeathClass> getDeathClasses() {
         return deathClasses;

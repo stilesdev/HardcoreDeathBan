@@ -23,15 +23,16 @@
 
 package com.mstiles92.plugins.hardcoredeathban.tasks;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
-import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
-import com.mstiles92.plugins.hardcoredeathban.util.Log;
-import com.mstiles92.plugins.hardcoredeathban.util.Utils;
+import java.util.UUID;
+
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.UUID;
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
+import com.mstiles92.plugins.hardcoredeathban.data.DeathClass;
+import com.mstiles92.plugins.hardcoredeathban.util.Log;
+import com.mstiles92.plugins.hardcoredeathban.util.Utils;
 
 /**
  * KickRunnable is a BukkitRunnable used to kick a Player after a short delay when getting banned after death.

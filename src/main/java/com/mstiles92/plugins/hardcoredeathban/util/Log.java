@@ -23,9 +23,9 @@
 
 package com.mstiles92.plugins.hardcoredeathban.util;
 
-import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
-
 import java.util.logging.Level;
+
+import com.mstiles92.plugins.hardcoredeathban.HardcoreDeathBan;
 
 public class Log {
     public static void log(Level level, String message) {

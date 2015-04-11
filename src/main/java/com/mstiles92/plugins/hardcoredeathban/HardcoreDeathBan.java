@@ -23,23 +23,23 @@
 
 package com.mstiles92.plugins.hardcoredeathban;
 
-import com.mstiles92.plugins.hardcoredeathban.config.Config;
-import com.mstiles92.plugins.hardcoredeathban.util.Log;
-import com.mstiles92.plugins.stileslib.calendar.CalendarUtils;
-import com.mstiles92.plugins.stileslib.commands.CommandRegistry;
-import com.mstiles92.plugins.stileslib.updates.UpdateChecker;
-import com.mstiles92.plugins.hardcoredeathban.commands.Credits;
-import com.mstiles92.plugins.hardcoredeathban.commands.Deathban;
-import com.mstiles92.plugins.hardcoredeathban.listeners.PlayerListener;
-import com.mstiles92.plugins.hardcoredeathban.util.Bans;
-import com.mstiles92.plugins.hardcoredeathban.util.RevivalCredits;
+import java.io.File;
+import java.io.IOException;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.mcstats.Metrics;
 
-import java.io.IOException;
+import com.mstiles92.plugins.hardcoredeathban.commands.Credits;
+import com.mstiles92.plugins.hardcoredeathban.commands.Deathban;
+import com.mstiles92.plugins.hardcoredeathban.config.Config;
+import com.mstiles92.plugins.hardcoredeathban.data.PlayerData;
+import com.mstiles92.plugins.hardcoredeathban.listeners.PlayerListener;
+import com.mstiles92.plugins.hardcoredeathban.util.Log;
+import com.mstiles92.plugins.stileslib.commands.CommandRegistry;
+import com.mstiles92.plugins.stileslib.updates.UpdateChecker;
 
 /**
  * HardcoreDeathBan is the main class of this Bukkit plugin.
@@ -49,26 +49,24 @@ import java.io.IOException;
  * @author mstiles92
  */
 public class HardcoreDeathBan extends JavaPlugin {
+
+	public final File PLAYERDATA_JSON_FILE = new File(this.getDataFolder(), "PlayerData.json");
+
     private static HardcoreDeathBan instance;
     private static Config config;
     private UpdateChecker updateChecker;
     private CommandRegistry commandRegistry;
-
-    public RevivalCredits credits = null;
-    public Bans bans = null;
 
     @Override
     public void onEnable() {
         instance = this;
         config = new Config();
 
-        try {
-            credits = new RevivalCredits(this, "credits.yml");
-            bans = new Bans(this, "bans.yml");
-        } catch (Exception e) {
-            Log.warning(ChatColor.RED + "Error opening a config file. Plugin will now be disabled.");
-            getPluginLoader().disablePlugin(this);
-        }
+		PlayerData.init(PLAYERDATA_JSON_FILE);
+		// Start autosave task (if enabled)
+		if (this.getConfigObject().playerDataAutosaveEnabled()) {
+			PlayerData.startAutosaveTask();
+		}
 
         commandRegistry = new CommandRegistry(this);
         commandRegistry.registerCommands(new Deathban());
@@ -91,8 +89,7 @@ public class HardcoreDeathBan extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        credits.save();
-        bans.save();
+    	PlayerData.save();
         config.save();
     }
 
